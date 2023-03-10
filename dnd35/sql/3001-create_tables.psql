@@ -1,0 +1,257 @@
+set client_min_messages = warning;
+begin transaction;
+
+/*
+==============================
+d20.monster
+==============================
+*/
+
+drop table if exists d20.monster cascade;
+create table d20.monster as
+select 
+    id                                                          :: integer              as monster_id,
+    family                                                      :: character varying    as family,
+    name                                                        :: character varying    as name,
+    (case when altname = 'None' then null else altname end)     :: character varying    as altname,
+    size                                                        :: d20.size             as size,
+    type                                                        :: d20.type             as type,
+    null                                                        :: integer              as fort_save,
+    null                                                        :: integer              as ref_save,
+    null                                                        :: integer              as will_save,
+    0                                                           :: double precision     as hit_dice,
+    0                                                           :: double precision     as hit_dice_d4,
+    0                                                           :: double precision     as hit_dice_d6,
+    0                                                           :: double precision     as hit_dice_d8,
+    0                                                           :: double precision     as hit_dice_d10,
+    0                                                           :: double precision     as hit_dice_d12,
+    0                                                           :: double precision     as hit_dice_plus,
+    0                                                           :: integer              as hit_points,
+    0                                                           :: integer              as armor_class,
+    0                                                           :: integer              as touch_ac,
+    0                                                           :: integer              as flat_footed_ac,
+    0                                                           :: integer              as strength,
+    0                                                           :: integer              as dexterity,
+    0                                                           :: integer              as constitution,
+    0                                                           :: integer              as intelligence,
+    0                                                           :: integer              as wisdom,
+    0                                                           :: integer              as charisma,
+    0                                                           :: double precision     as challenge_rating,
+    0                                                           :: double precision     as adjusted_challenge_rating
+from monster;
+
+alter table d20.monster alter column monster_id set not null;
+alter table d20.monster alter column family set not null;
+alter table d20.monster alter column name set not null;
+
+alter table d20.monster add primary key (monster_id);
+
+/*
+==============================
+d20.monster_subtype
+==============================
+*/
+
+drop table if exists d20.monster_subtype;
+create table d20.monster_subtype as
+select 
+    m.id as monster_id, 
+    btrim(st.subtype) as subtype
+from (
+    select id,
+    case 
+        when descriptor = 'None'                    then null
+        when descriptor = 'Evil Chaotic or Lawful'  then 'Evil, Chaotic, Lawful'
+        else descriptor
+    end as subtypes
+    from monster
+) m, regexp_split_to_table(m.subtypes, ',') as st(subtype);
+
+/*
+==============================
+monster_attack
+==============================
+*/
+
+drop table if exists monster_attack cascade;
+create temporary table monster_attack as
+select id, attack from monster;
+
+update monster_attack set attack = null where attack = '-';
+update monster_attack set attack = 'Greatsword +73 melee (2d6+20/17-20); or boulder +55 ranged (2d8+20/19-20)' where id = 5;
+update monster_attack set attack = 'Claw +58 melee (4d6+16)' where id = 6;
+update monster_attack set attack = 'Colossal club +79 melee (6d6+18); or slam +79 melee (4d6+12); or thrown object (weighing 10 tons or less) +65 ranged (4d6+12)' where id = 14;
+update monster_attack set attack = '24 eye rays +31 ranged touch (eye rays), 12 bites +28 melee (2d8+5/19-20)' where id = 50;
+update monster_attack set attack = 'Colossal +5 warhammer +87 melee (4d8+30/19-20 (+2d6 on critical hit)); or Colossal +5 javelin +70 ranged (2d10+22/19-20)' where id = 76;
+update monster_attack set attack = 'Claw +15 melee (2d6+10) and eye ray +8 ranged touch (eye ray)' where id = 174;
+update monster_attack set attack = 'Bite +5 melee (1d8+2 plus poison)' where id = 364;
+update monster_attack set attack = 'Claw +11 melee (1d8+7)' where id = 474;
+update monster_attack set attack = 'Claw +11 melee (1d8+7)' where id = 475;
+update monster_attack set attack = 'Morningstar +16 melee (3d6+8) or rock +9 ranged (2d6+8)' where id = 451;
+update monster_attack set attack = 'Bite +13 melee (2d8+9)' where id = 581;
+update monster_attack set attack = replace(attack, '*', '');
+update monster_attack set attack = regexp_replace(attack, ' (\([^\)]+\))[\s]?melee touch', ' melee touch \1');
+update monster_attack set attack = regexp_replace(attack, ' (\([^\)]+\))[\s]?ranged touch', ' ranged touch \1');
+update monster_attack set attack = regexp_replace(attack, ' (\([^\)]+\))[\s]?melee', ' melee \1');
+update monster_attack set attack = regexp_replace(attack, ' (\([^\)]+\))[\s]?ranged', ' ranged \1');
+update monster_attack set attack = replace(attack, ') or', '); or');
+update monster_attack set attack = replace(attack, ') and', '); and');
+
+drop table if exists d20.monster_attack cascade;
+create table d20.monster_attack as
+select
+    m.monster_id,
+    m.option_id,
+    m.sequence_id,
+    m.matches[3] as type,
+    m.matches[1] as name,
+    m.matches[2] :: integer as attack,
+    m.matches[4] as effect,
+    null :: numeric as damage
+from
+(
+    select
+        m.monster_id,
+        m.option_id,
+        m.sequence_id,
+        regexp_matches(m.attack, '^(.+) ([+-][0-9]+) ([^\(]*) \(([^\)]+)\)$') as matches
+    from
+    (
+        select
+            m.monster_id, m.option_id, m.sequence_id,
+            case 
+                when m.attack like 'Fine %' or m.attack like 'Tiny %' or m.attack like 'Small %' or m.attack like 'Medium %' or m.attack like 'Large %' or m.attack like 'Huge %' or m.attack like 'Gargantuan %' or m.attack like 'Colossal %' then m.attack 
+                else overlay(m.attack placing lower(substring(m.attack from 1 for 1)) from 1 for 1) 
+            end as attack
+        from 
+        (
+            select m.monster_id, m.option_id, s.sequence_id, s.attack 
+            from 
+            (
+                select m.id as monster_id, o.option_id, o.attack 
+                from monster_attack m, regexp_split_to_table(m.attack, '; or ') with ordinality o(attack, option_id) 
+                where m.attack is not null
+            ) m, 
+            regexp_split_to_table(m.attack, '; and ') with ordinality s(attack, sequence_id)
+        ) m
+    ) m
+) m;
+
+update d20.monster_attack set damage = parse_dice(effect);
+
+/*
+==============================
+monster_full_attack
+==============================
+*/
+
+drop table if exists monster_full_attack cascade;
+create temporary table monster_full_attack as
+select id, full_attack from monster;
+
+update monster_full_attack set full_attack = null where full_attack = '-';
+/*
+update monster_attack set attack = 'Greatsword +73 melee (2d6+20/17-20); or boulder +55 ranged (2d8+20/19-20)' where id = 5;
+update monster_attack set attack = 'Claw +58 melee (4d6+16)' where id = 6;
+update monster_attack set attack = 'Colossal club +79 melee (6d6+18); or slam +79 melee (4d6+12); or thrown object (weighing 10 tons or less) +65 ranged (4d6+12)' where id = 14;
+update monster_attack set attack = '24 eye rays +31 ranged touch (eye rays), 12 bites +28 melee (2d8+5/19-20)' where id = 50;
+update monster_attack set attack = 'Colossal +5 warhammer +87 melee (4d8+30/19-20 (+2d6 on critical hit)); or Colossal +5 javelin +70 ranged (2d10+22/19-20)' where id = 76;
+update monster_attack set attack = 'Claw +15 melee (2d6+10) and eye ray +8 ranged touch (eye ray)';
+update monster_attack set attack = 'Bite +5 melee (1d8+2 plus poison)' where id = 364;
+update monster_attack set attack = 'Claw +11 melee (1d8+7)' where id = 474;
+update monster_attack set attack = 'Claw +11 melee (1d8+7)' where id = 475;
+update monster_attack set attack = 'Morningstar +16 melee (3d6+8) or rock +9 ranged (2d6+8)' where id = 451;
+update monster_attack set attack = 'Bite +13 melee (2d8+9)' where id = 581;
+*/
+update monster_full_attack set full_attack = '2 spinning blades +43 melee (2d6+12/19-20(plus 1d6 on critical)), 2 slams +35 melee (2d6+6), shocking touch +35 melee touch (2d6+6); or electricity ray +35 ranged touch (10d6 electricity), 6 spikes +30 ranged (2d6+12) (120 ft. range increment)' where id = 1;
+update monster_full_attack set full_attack = '24 eye rays +31 ranged touch (eye rays), 12 bites +28 melee (2d8+5/19-20)' where id = 50;
+update monster_full_attack set full_attack = '2 claws +40 melee (3d8+21/19-20 (+1d6 on critical hit) plus blazefire), 1 skull butt +32 melee (2d6+10 plus blazefire)' where id = 59;
+update monster_full_attack set full_attack = '4 claws +56 melee (2d6+16/19-20 (+1d6 on critical hit)), bite +54 melee (4d6+8)' where id = 72;
+update monster_full_attack set full_attack = '4 claws +63 melee (3d6+18/19-20 (+1d6 on critical hit)), 3 bites +61 melee (4d6+9)' where id = 73;
+update monster_full_attack set full_attack = '2 claws +40 melee (3d8+21/19-20 (+1d6 on critical hit) plus blight-fire), skull butt +32 melee (2d6+10 plus blightfire)' where id = 81;
+update monster_full_attack set full_attack = 'Bite +7 melee (2d6+4); and bite +7 melee (1d8+4); and gore +7 melee (1d8+4); and 2 claws +2 melee (1d6+2)' where id = 558;
+update monster_full_attack set full_attack = 'Slam +2 melee (1d6+1) or club +2 melee (1d6+1)' where id = 610;
+update monster_full_attack set full_attack = replace(full_attack, '*', '');
+update monster_full_attack set full_attack = regexp_replace(full_attack, ' (\([^\)]+\))[\s]?melee touch', ' melee touch \1', 'g');
+update monster_full_attack set full_attack = regexp_replace(full_attack, ' (\([^\)]+\))[\s]?ranged touch', ' ranged touch \1', 'g');
+update monster_full_attack set full_attack = regexp_replace(full_attack, ' (\([^\)]+\))[\s]?melee', ' melee \1', 'g');
+update monster_full_attack set full_attack = regexp_replace(full_attack, ' (\([^\)]+\))[\s]?ranged', ' ranged \1', 'g');
+update monster_full_attack set full_attack = replace(full_attack, ') or', '); or');
+update monster_full_attack set full_attack = replace(full_attack, ') and', '); and');
+update monster_full_attack set full_attack = replace(full_attack, '),', '); and');
+
+drop table if exists monster_full_attack_list cascade;
+create temporary table monster_full_attack_list as
+select
+    m.monster_id, m.option_id, m.sequence_id,
+    case 
+        when m.attack like 'Fine %' or m.attack like 'Tiny %' or m.attack like 'Small %' or m.attack like 'Medium %' or m.attack like 'Large %' or m.attack like 'Huge %' or m.attack like 'Gargantuan %' or m.attack like 'Colossal %' then m.attack 
+        else overlay(m.attack placing lower(substring(m.attack from 1 for 1)) from 1 for 1) 
+    end as attack
+from 
+(
+    select m.monster_id, m.option_id, s.sequence_id, s.attack 
+    from 
+    (
+        select m.id as monster_id, o.option_id, o.attack 
+        from monster_full_attack m, regexp_split_to_table(m.full_attack, '; or ') with ordinality o(attack, option_id) 
+        where m.full_attack is not null
+    ) m, 
+    regexp_split_to_table(m.attack, '; and ') with ordinality s(attack, sequence_id)
+) m;
+
+
+/*
+
+select
+    m.monster_id,
+    m.option_id,
+    m.sequence_id,
+    m.matches[3] as type,
+    m.matches[1] as name,
+    m.matches[2] as attack,
+    m.matches[4] as damage
+from 
+(
+    select
+        m.monster_id,
+        m.option_id,
+        m.sequence_id,
+        regexp_matches(m.attack, '^(.+) ([+-][0-9]+) ([^\(]*) \(([^\)]+)\)$') as matches
+    from 
+    (
+        select
+            m.monster_id, m.option_id, m.sequence_id,
+            case 
+                when m.attack like 'Fine %' or m.attack like 'Tiny %' or m.attack like 'Small %' or m.attack like 'Medium %' or m.attack like 'Large %' or m.attack like 'Huge %' or m.attack like 'Gargantuan %' or m.attack like 'Colossal %' then m.attack 
+                else overlay(m.attack placing lower(substring(m.attack from 1 for 1)) from 1 for 1) 
+            end as attack
+        from 
+        (
+            select m.monster_id, m.option_id, s.sequence_id, s.attack 
+            from 
+            (
+                select m.id as monster_id, o.option_id, o.attack 
+                from monster_attack m, regexp_split_to_table(m.attack, '; or ') with ordinality o(attack, option_id) 
+                where m.attack is not null
+            ) m, 
+            regexp_split_to_table(m.attack, '; and ') with ordinality s(attack, sequence_id)
+        ) m
+    ) m
+) m
+
+select
+    m.monster_id,
+    m.attack_id,
+    regexp_matches(m.attack, '^(.+) ([+-][0-9]+) ([^\(]*) \([^\)]+\)$') as matches
+from monster_attack_list m
+
+
+select m.id, m.name, m.full_attack, f.full_attack
+from monster m join monster_full_attack f on (m.id = f.id)
+where f.full_attack ~ '[a-zA-Z][+]'
+
+*/
+
+commit transaction;
+set client_min_messages = notice;

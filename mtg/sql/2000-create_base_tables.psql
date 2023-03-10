@@ -1,0 +1,222 @@
+set client_min_messages = error;
+begin transaction;
+
+
+/*
+====================
+mtg_rarity
+====================
+*/
+
+drop type if exists mtg_rarity cascade;
+create type mtg_rarity as enum (
+    'Basic Land',
+    'Common',
+    'Uncommon',
+    'Rare',
+    'Mythic Rare',
+    'Special'
+);
+
+
+/*
+====================
+text_to_date
+====================
+*/
+
+drop function if exists text_to_date(text, date) cascade;
+create or replace function text_to_date(text, date = null) returns date as $$
+    select case when $1 ~ '^[\d]{4}-[\d]{2}-[\d]{2}$' then $1 :: date else $2 end
+$$ language sql immutable;
+
+/*
+====================
+text_to_integer
+====================
+*/
+
+drop function if exists text_to_integer(text, integer) cascade;
+create or replace function text_to_integer(text, integer = null) returns integer as $$
+    select case when $1 ~ '^(\+|-)?\d+$' then $1 :: integer else $2 end
+$$ language sql immutable;
+
+/*
+====================
+make_color_string
+====================
+*/
+
+drop function if exists make_color_string(text[]) cascade;
+create or replace function make_color_string(colors text[]) returns character varying as $$
+    select
+        case when 'White'   = any(colors) then 'W' else '' end ||
+        case when 'Blue'    = any(colors) then 'U' else '' end ||
+        case when 'Black'   = any(colors) then 'B' else '' end ||
+        case when 'Red'     = any(colors) then 'R' else '' end ||
+        case when 'Green'   = any(colors) then 'G' else '' end
+$$ language sql immutable;
+
+
+/*
+====================
+mtg_sets
+====================
+*/
+
+drop table if exists mtg_all_sets cascade;
+create table mtg_all_sets as
+select
+    s.name                                  :: character varying    as name,
+    s.code                                  :: character varying    as code,
+    s.gathererCode                          :: character varying    as gatherer_code,
+    s.oldCode                               :: character varying    as old_code,
+    s.magicCardsInfoCode                    :: character varying    as magic_cards_info_code,
+    text_to_date(s.releaseDate)                                     as release_date,
+    s.border                                :: character varying    as border,
+    s.type                                  :: character varying    as type,
+    s.block                                 :: character varying    as block,
+    coalesce(s.onlineOnly :: bool, false)   :: character varying    as online_only
+from json_sets s;
+
+/*
+====================
+mtg_all_cards
+====================
+*/
+
+drop table if exists mtg_all_cards cascade;
+create table mtg_all_cards as
+select
+    c.id                                    :: character varying    as id,
+    c.name                                  :: character varying    as name,
+    c.manaCost                              :: character varying    as mana_cost,
+    text_to_integer(c.cmc)                                          as cmc,
+    make_color_string(c.colors)                                     as colors,
+    make_color_string(c.colorIdentity)                              as color_identity,
+    c.type                                  :: character varying    as type,
+    c.rarity                                :: mtg_rarity           as rarity,
+    c.text                                  :: character varying    as text,
+    c.flavor                                :: character varying    as flavor,
+    c.artist                                :: character varying    as artist,
+    c.number                                :: character varying    as number,
+    text_to_integer(c.power)                                        as power,
+    text_to_integer(c.toughness)                                    as toughness,
+    text_to_integer(c.loyalty)                                      as loyalty,
+    text_to_integer(c.multiverseId)                                 as multiverse_id,
+    c.imageName                             :: character varying    as image_name,
+    c.watermark                             :: character varying    as watermark,
+    c.border                                :: character varying    as border,
+    coalesce(c.timeshifted :: bool, false)                          as timeshifted,
+    text_to_integer(c.hand)                                         as hand,
+    text_to_integer(c.life)                                         as life,
+    coalesce(c.reserved                     :: bool, false)         as reserved,
+    text_to_date(c.releaseDate)                                     as release_date,
+    coalesce(c.starter :: bool, false)                              as starter,
+    mciNumber                               :: character varying    as mci_number
+from json_sets_cards sc, json_sets s, json_cards c
+where (sc.code = s.code and sc.id = c.id)
+;
+
+/*
+====================
+mtg_all_sets_cards
+====================
+*/
+
+drop table if exists mtg_set_card cascade;
+create table mtg_set_card as
+select distinct
+    s.name as "set",
+    c.name as "card",
+from json_sets_cards sc
+join json_sets s on (sc.code = s.code)
+join json_cards c on (sc.id = c.id);
+
+/*
+====================
+mtg_card_supertype
+====================
+*/
+
+drop table if exists mtg_card_supertype cascade;
+create table mtg_card_supertype as
+select distinct
+    c.name :: character varying as name,
+    t :: character varying as supertype
+from mtg_all_cards cc, json_cards c, unnest(c.supertypes) t
+where cc.card_id = c.id;
+
+/*
+====================
+mtg_card_type
+====================
+*/
+
+drop table if exists mtg_card_type cascade;
+create table mtg_card_type as
+select distinct 
+    c.name :: character varying as card,
+    t :: character varying as type
+from json_cards c, unnest(c.types) t
+where cc.card_id = c.id;
+
+/*
+====================
+mtg_card_subtype
+====================
+*/
+
+drop table if exists mtg_card_subtype cascade;
+create table mtg_card_subtype as
+select distinct
+    c.name :: character varying as card,
+    t :: character varying as subtype
+from mtg_card cc, json_cards c, unnest(c.subtypes) t
+where cc.card_id = c.id;
+
+/*
+==============================
+mtg_card.text
+==============================
+*/
+
+
+-- Replace NULL with empty string.
+update mtg_card set text = coalesce(text, '');
+
+-- Replace instances of card's name in rules text with 'CARDNAME'.
+update mtg_card set text = replace(text, name, 'CARDNAME');
+
+-- Replace newlines with a period and space.
+update mtg_card set text = regexp_replace(text, '\n', '. ', 'g');
+
+-- Replace reminder text with a period.
+update mtg_card set text = regexp_replace(text, '[\s]?\([^\)]*\)', '.', 'g');
+
+-- Replace runs of spaces before and after a period with a single space after.
+update mtg_card set text = regexp_replace(text, '[\s]+\.[\s]+', '. ', 'g');
+
+-- Collapse multiple periods into a single period.
+update mtg_card set text = regexp_replace(text, '[\.]+', '.', 'g');
+
+-- Strip periods and spaces at the beginning of card text.
+update mtg_card set text = regexp_replace(text, '^[\.\s]+', '');
+
+-- Add a period to the end if there isn't one.
+update mtg_card set text = text || '.' where text <> '' and text not like '%.';
+
+/*
+==============================
+create indexes
+==============================
+*/
+
+create index idx_mtg_card_text on mtg_card(text);
+create index idx_mtg_card_type on mtg_card_type(type);
+create index idx_mtg_card_subtype on mtg_card_subtype(subtype);
+create index idx_mtg_card_supertype on mtg_card_supertype(supertype);
+
+
+set client_min_messages = notice;
+commit transaction;

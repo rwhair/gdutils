@@ -1,0 +1,36 @@
+set client_min_messages = warning;
+begin transaction;
+
+/*
+==============================
+parse_integer
+==============================
+*/
+
+create or replace function parse_integer(input_text text, default_value integer = null) returns integer as $$
+select case when btrim(input_text) ~ '[+-]?[0-9]+' then btrim(input_text) :: integer else default_value end
+$$ language sql immutable;
+
+/*
+==============================
+parse_rational
+==============================
+*/
+
+create or replace function parse_rational(input_text text, default_value double precision = null) returns double precision as $$
+select case when btrim(input_text) like '%/%' then coalesce((parse_integer(split_part(input_text, '/', 1), 0) :: double precision) / (parse_integer(split_part(input_text, '/', 2), 1) :: double precision)) else coalesce(parse_integer(input_text) :: double precision, default_value) end
+$$ language sql immutable;
+
+/*
+==============================
+parse_dice
+==============================
+*/
+
+create or replace function parse_dice(input_text text) returns double precision as $$
+select greatest(1, (((coalesce(d[1], '1') :: double precision) + (coalesce(d[3], '0') :: double precision)) + ((coalesce(d[1], '1') :: double precision) * (coalesce(d[2], '0') :: double precision) + (coalesce(d[3], '0') :: double precision))) / 2)
+from (select regexp_matches(input_text, '([1-9][0-9]*)?(?:d([1-9][0-9]*))?([+-]?[0-9]+)?') d) m
+$$ language sql immutable;
+
+commit transaction;
+set client_min_messages = notice;

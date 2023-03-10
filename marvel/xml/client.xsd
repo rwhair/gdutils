@@ -1,0 +1,1570 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="collectable">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="id" type="xs:string" minOccurs="0" />
+        <xs:element name="missingDialogId" type="xs:string" minOccurs="0" />
+        <xs:element name="name" type="xs:string" minOccurs="0" />
+        <xs:element name="publishDate" type="xs:string" minOccurs="0" />
+        <xs:element name="storyDialogId" type="xs:string" minOccurs="0" />
+        <xs:element name="title" type="xs:string" minOccurs="0" />
+        <xs:element ref="collectable" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="unlocks">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="unlock" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="id" type="xs:string" minOccurs="0" />
+              <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+              <xs:element name="targetId" type="xs:string" minOccurs="0" />
+              <xs:element name="unlockType" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="data">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="utcTimestamp" type="xs:string" minOccurs="0" />
+        <xs:element name="pstTimestamp" type="xs:string" minOccurs="0" />
+        <xs:element name="actionTags" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="actionTag" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="statusId" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="advisors" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="advisor" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="imageAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="tooltip" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="baseVillains" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="baseVillain" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="description" type="xs:string" minOccurs="0" />
+                    <xs:element name="bio" type="xs:string" minOccurs="0" />
+                    <xs:element name="cogAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="cogBio" type="xs:string" minOccurs="0" />
+                    <xs:element name="cogName" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="iconAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="swfAssetId" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="bundles" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="bundle" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="costId" type="xs:string" minOccurs="0" />
+                    <xs:element name="description" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="expireDate" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="importantItemId" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="visualLayout" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="chapterTrackRewards" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="chapterTrackReward" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="chapterId" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="track" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="chapters" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="chapter" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="backgroundAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="challengeModeOffset" type="xs:string" minOccurs="0" />
+                    <xs:element name="completeRewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="description" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="isEnabled" type="xs:string" minOccurs="0" />
+                    <xs:element name="season" type="xs:string" minOccurs="0" />
+                    <xs:element name="sequenceNumber" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="collectable" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element name="combatLetterGrades" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="combatLetterGrade" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="a" type="xs:string" minOccurs="0" />
+                    <xs:element name="b" type="xs:string" minOccurs="0" />
+                    <xs:element name="c" type="xs:string" minOccurs="0" />
+                    <xs:element name="numberOfEnemies" type="xs:string" minOccurs="0" />
+                    <xs:element name="s" type="xs:string" minOccurs="0" />
+                    <xs:element name="sPlus" type="xs:string" minOccurs="0" />
+                    <xs:element name="threatLevel" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="fdLeases" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="fdLease" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="costId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="fdMissions" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="fdMission" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="fdPlanes" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="fdPlane" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="friendCost" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="flightDeckAircrafts" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="flightDeckAircraft" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="artId" type="xs:string" minOccurs="0" />
+                    <xs:element name="costId" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="iconId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="landingId" type="xs:string" minOccurs="0" />
+                    <xs:element name="landingShadowAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="level" type="xs:string" minOccurs="0" />
+                    <xs:element name="lockId" type="xs:string" minOccurs="0" />
+                    <xs:element name="numFriends" type="xs:string" minOccurs="0" />
+                    <xs:element name="takeoffId" type="xs:string" minOccurs="0" />
+                    <xs:element name="takeoffShadowAssetId" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="flightDeckMaps" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="flightDeckMap" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="startFlightDeckSlotId" type="xs:string" minOccurs="0" />
+                    <xs:element name="flightDeckMapSlots" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="flightDeckMapSlot" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="flightDeckSlotId" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="flightDeckSlots" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="flightDeckSlot" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="finishNowCostId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="level" type="xs:string" minOccurs="0" />
+                    <xs:element name="lockId" type="xs:string" minOccurs="0" />
+                    <xs:element name="nextSlotId" type="xs:string" minOccurs="0" />
+                    <xs:element name="slotTarget" type="xs:string" minOccurs="0" />
+                    <xs:element name="flightDeckSlotStates" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="flightDeckSlotState" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="consumableId" type="xs:string" minOccurs="0" />
+                                <xs:element name="count" type="xs:string" minOccurs="0" />
+                                <xs:element name="sequenceNumber" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="groupBosses" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="groupBoss" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="activationTime" type="xs:string" minOccurs="0" />
+                    <xs:element name="backgroundAssetIds" type="xs:string" minOccurs="0" />
+                    <xs:element name="cogImageAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="cogName" type="xs:string" minOccurs="0" />
+                    <xs:element name="cogSwfAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="combatTableId" type="xs:string" minOccurs="0" />
+                    <xs:element name="deactivationTime" type="xs:string" minOccurs="0" />
+                    <xs:element name="durationDays" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="isEnabled" type="xs:string" minOccurs="0" />
+                    <xs:element name="milestoneHealthPercent" type="xs:string" minOccurs="0" />
+                    <xs:element name="milestoneRewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="neighborVictoryRewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="roundCount" type="xs:string" minOccurs="0" />
+                    <xs:element name="socialLootTableId" type="xs:string" minOccurs="0" />
+                    <xs:element name="softCurrencyDamageMultiplier" type="xs:string" minOccurs="0" />
+                    <xs:element name="unlockQuestId" type="xs:string" minOccurs="0" />
+                    <xs:element name="victoryRewardId" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="heroes" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="hero" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="accuracyRating" type="xs:string" minOccurs="0" />
+                    <xs:element name="apRechargeRate" type="xs:string" minOccurs="0" />
+                    <xs:element name="attackRating" type="xs:string" minOccurs="0" />
+                    <xs:element name="bio" type="xs:string" minOccurs="0" />
+                    <xs:element name="cogImageAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="cogName" type="xs:string" minOccurs="0" />
+                    <xs:element name="cogSwfAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="controller" type="xs:string" minOccurs="0" />
+                    <xs:element name="costId" type="xs:string" minOccurs="0" />
+                    <xs:element name="defaultCounter" type="xs:string" minOccurs="0" />
+                    <xs:element name="defenseRating" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="evasionRating" type="xs:string" minOccurs="0" />
+                    <xs:element name="expireDate" type="xs:string" minOccurs="0" />
+                    <xs:element name="healthRating" type="xs:string" minOccurs="0" />
+                    <xs:element name="hpRechargeRate" type="xs:string" minOccurs="0" />
+                    <xs:element name="iconAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="initiative" type="xs:string" minOccurs="0" />
+                    <xs:element name="largeAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="leftAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="morphSwfAssetIds" type="xs:string" minOccurs="0" />
+                    <xs:element name="obtainDialogId" type="xs:string" minOccurs="0" />
+                    <xs:element name="purchaseLockId" type="xs:string" minOccurs="0" />
+                    <xs:element name="rightAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="sequenceNumber" type="xs:string" minOccurs="0" />
+                    <xs:element name="staminaRating" type="xs:string" minOccurs="0" />
+                    <xs:element name="startDate" type="xs:string" minOccurs="0" />
+                    <xs:element name="swfAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="tags" type="xs:string" minOccurs="0" />
+                    <xs:element name="teamTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="unifiedExpireDateId" type="xs:string" minOccurs="0" />
+                    <xs:element name="unifiedStartDateId" type="xs:string" minOccurs="0" />
+                    <xs:element name="uniformItemId" type="xs:string" minOccurs="0" />
+                    <xs:element name="worksWithTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="statusIds" type="xs:string" minOccurs="0" />
+                    <xs:element name="heroActions" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="heroAction" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="actionId" type="xs:string" minOccurs="0" />
+                                <xs:element name="level" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="localeStrings" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="localeString" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="generated" type="xs:string" minOccurs="0" />
+                    <xs:element name="locale" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="text" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="lockboxCollections" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="lockboxCollection" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="associatedId" type="xs:string" minOccurs="0" />
+                    <xs:element name="associatedType" type="xs:string" minOccurs="0" />
+                    <xs:element name="backgroundAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="description" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="itemCollectionId" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="silhouetteAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="smallAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="storyTitle" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="missionPaths" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="missionPath" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="ambientTrackAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="bossBuildings" type="xs:string" minOccurs="0" />
+                    <xs:element name="bossId" type="xs:string" minOccurs="0" />
+                    <xs:element name="completeDialogId" type="xs:string" minOccurs="0" />
+                    <xs:element name="grandRewardItemId" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="eventBuildings" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="imageAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="location" type="xs:string" minOccurs="0" />
+                    <xs:element name="lockDescription" type="xs:string" minOccurs="0" />
+                    <xs:element name="lockId" type="xs:string" minOccurs="0" />
+                    <xs:element name="mapAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="miniBossBuildings" type="xs:string" minOccurs="0" />
+                    <xs:element name="missionId" type="xs:string" minOccurs="0" />
+                    <xs:element name="musicTrackAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="pathName" type="xs:string" minOccurs="0" />
+                    <xs:element name="restrictedHeroTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="pathSortOrder" type="xs:string" minOccurs="0" />
+                    <xs:element name="startBuildings" type="xs:string" minOccurs="0" />
+                    <xs:element name="startDialogId" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="missions" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="mission" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="ambientTrackAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="baseScore" type="xs:string" minOccurs="0" />
+                    <xs:element name="chapterId" type="xs:string" minOccurs="0" />
+                    <xs:element name="colorShift" type="xs:string" minOccurs="0" />
+                    <xs:element name="completeDialogId" type="xs:string" minOccurs="0" />
+                    <xs:element name="description" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="epicBossId" type="xs:string" minOccurs="0" />
+                    <xs:element name="grandRewardItemCollectionId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="imageAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="location" type="xs:string" minOccurs="0" />
+                    <xs:element name="lockId" type="xs:string" minOccurs="0" />
+                    <xs:element name="mapAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="maxDeploys" type="xs:string" minOccurs="0" />
+                    <xs:element name="maxEpicBosses" type="xs:string" minOccurs="0" />
+                    <xs:element name="maxHeroicBattles" type="xs:string" minOccurs="0" />
+                    <xs:element name="maxIncursions" type="xs:string" minOccurs="0" />
+                    <xs:element name="previewText" type="xs:string" minOccurs="0" />
+                    <xs:element name="musicTrackAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="sequenceNumber" type="xs:string" minOccurs="0" />
+                    <xs:element name="startDialogId" type="xs:string" minOccurs="0" />
+                    <xs:element name="survivalLossPar" type="xs:string" minOccurs="0" />
+                    <xs:element name="survivalMultiplierMax" type="xs:string" minOccurs="0" />
+                    <xs:element name="unlockDialogId" type="xs:string" minOccurs="0" />
+                    <xs:element name="unlockQuestId" type="xs:string" minOccurs="0" />
+                    <xs:element name="useMasteryEnemyLevels" type="xs:string" minOccurs="0" />
+                    <xs:element name="unifiedActivationTimeId" type="xs:string" minOccurs="0" />
+                    <xs:element name="unifiedExpirationTimeId" type="xs:string" minOccurs="0" />
+                    <xs:element name="unlockTaskListCheckpointId" type="xs:string" minOccurs="0" />
+                    <xs:element name="temporaryKeyIds" type="xs:string" minOccurs="0" />
+                    <xs:element name="coords" type="xs:string" minOccurs="0" />
+                    <xs:element name="destinations" type="xs:string" minOccurs="0" />
+                    <xs:element name="hideWhenLocked" type="xs:string" minOccurs="0" />
+                    <xs:element name="missionMasteries" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="missionMastery" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="completeDialogId" type="xs:string" minOccurs="0" />
+                                <xs:element name="enemyLevelMax" type="xs:string" minOccurs="0" />
+                                <xs:element name="enemyLevelMin" type="xs:string" minOccurs="0" />
+                                <xs:element name="level" type="xs:string" minOccurs="0" />
+                                <xs:element name="missionId" type="xs:string" minOccurs="0" />
+                                <xs:element name="recommendedLevel" type="xs:string" minOccurs="0" />
+                                <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                                <xs:element name="score" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="missionParties" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="missionParty" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="id" type="xs:string" minOccurs="0" />
+                                <xs:element name="missionId" type="xs:string" minOccurs="0" />
+                                <xs:element name="missionPathId" type="xs:string" minOccurs="0" />
+                                <xs:element name="name" type="xs:string" minOccurs="0" />
+                                <xs:element name="partyId" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="questPriorities" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="questPriority" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="priority" type="xs:string" minOccurs="0" />
+                    <xs:element name="questType" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="questTasks" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="questTask" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="chapterId" type="xs:string" minOccurs="0" />
+                    <xs:element name="index" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="quests" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="quest" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="activationTime" type="xs:string" minOccurs="0" />
+                    <xs:element name="advisorId" type="xs:string" minOccurs="0" />
+                    <xs:element name="chapterId" type="xs:string" minOccurs="0" />
+                    <xs:element name="completeDialogId" type="xs:string" minOccurs="0" />
+                    <xs:element name="description" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="expirationTime" type="xs:string" minOccurs="0" />
+                    <xs:element name="hintText" type="xs:string" minOccurs="0" />
+                    <xs:element name="iconAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="questType" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="sideQuest" type="xs:string" minOccurs="0" />
+                    <xs:element name="sortOrder" type="xs:string" minOccurs="0" />
+                    <xs:element name="subIconAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="taskListId" type="xs:string" minOccurs="0" />
+                    <xs:element name="triggerDialogId" type="xs:string" minOccurs="0" />
+                    <xs:element name="triggerDisabled" type="xs:string" minOccurs="0" />
+                    <xs:element name="unifiedActivationTimeId" type="xs:string" minOccurs="0" />
+                    <xs:element name="unifiedExpirationTimeId" type="xs:string" minOccurs="0" />
+                    <xs:element name="viewRewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="questObjectives" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="questObjective" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="associatedId" type="xs:string" minOccurs="0" />
+                                <xs:element name="count" type="xs:string" minOccurs="0" />
+                                <xs:element name="description" type="xs:string" minOccurs="0" />
+                                <xs:element name="finishCostId" type="xs:string" minOccurs="0" />
+                                <xs:element name="iconAssetId" type="xs:string" minOccurs="0" />
+                                <xs:element name="id" type="xs:string" minOccurs="0" />
+                                <xs:element name="name" type="xs:string" minOccurs="0" />
+                                <xs:element name="objectiveDetail" type="xs:string" minOccurs="0" />
+                                <xs:element name="objectiveSubType" type="xs:string" minOccurs="0" />
+                                <xs:element name="objectiveType" type="xs:string" minOccurs="0" />
+                                <xs:element name="qty" type="xs:string" minOccurs="0" />
+                                <xs:element name="questId" type="xs:string" minOccurs="0" />
+                                <xs:element name="sequenceNumber" type="xs:string" minOccurs="0" />
+                                <xs:element name="subIconAssetId" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="reconMissions" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="reconMission" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="costToastId" type="xs:string" minOccurs="0" />
+                    <xs:element name="description" type="xs:string" minOccurs="0" />
+                    <xs:element name="duration" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="imageId" type="xs:string" minOccurs="0" />
+                    <xs:element name="level" type="xs:string" minOccurs="0" />
+                    <xs:element name="local" type="xs:string" minOccurs="0" />
+                    <xs:element name="lockId" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="researches" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="research" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="category" type="xs:string" minOccurs="0" />
+                    <xs:element name="costId" type="xs:string" minOccurs="0" />
+                    <xs:element name="description" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="duration" type="xs:string" minOccurs="0" />
+                    <xs:element name="iconAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="largeAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="line" type="xs:string" minOccurs="0" />
+                    <xs:element name="linePriority" type="xs:string" minOccurs="0" />
+                    <xs:element name="lockId" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="smallAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="tags" type="xs:string" minOccurs="0" />
+                    <xs:element name="unlockedItems" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="secretChapters" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="secretChapter" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="activationTime" type="xs:string" minOccurs="0" />
+                    <xs:element name="chapterId" type="xs:string" minOccurs="0" />
+                    <xs:element name="deactivationTime" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="soundSettings" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="soundSetting" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="assetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="loop" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="pan" type="xs:string" minOccurs="0" />
+                    <xs:element name="soundType" type="xs:string" minOccurs="0" />
+                    <xs:element name="startDelay" type="xs:string" minOccurs="0" />
+                    <xs:element name="volume" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="staticSettings" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="staticSetting" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="value" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="storeTags" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="storeTag" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="color" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="iconAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="sequenceNumber" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="taskListCheckpoints" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="taskListCheckpoint" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="requiredTaskCount" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="taskListId" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="taskLists" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="taskList" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="chapterId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="taskListType" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tournamentLeagues" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="tournamentLeague" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="cogAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="matchmakerConfigId" type="xs:string" minOccurs="0" />
+                    <xs:element name="minAttacks" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="percentBuffer" type="xs:string" minOccurs="0" />
+                    <xs:element name="percentTier" type="xs:string" minOccurs="0" />
+                    <xs:element name="rankBuffer" type="xs:string" minOccurs="0" />
+                    <xs:element name="rankTier" type="xs:string" minOccurs="0" />
+                    <xs:element name="ratingTier" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="sortOrder" type="xs:string" minOccurs="0" />
+                    <xs:element name="tournamentName" type="xs:string" minOccurs="0" />
+                    <xs:element name="matchmakerConfig" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="id" type="xs:string" minOccurs="0" />
+                          <xs:element name="levelIdealAtCap" type="xs:string" minOccurs="0" />
+                          <xs:element name="levelIdealUnderCap" type="xs:string" minOccurs="0" />
+                          <xs:element name="levelIncrementAtCap" type="xs:string" minOccurs="0" />
+                          <xs:element name="levelIncrementUnderCap" type="xs:string" minOccurs="0" />
+                          <xs:element name="levelOffsetAtCap" type="xs:string" minOccurs="0" />
+                          <xs:element name="levelOffsetUnderCap" type="xs:string" minOccurs="0" />
+                          <xs:element name="matchmakerType" type="xs:string" minOccurs="0" />
+                          <xs:element name="metascoreIdeal" type="xs:string" minOccurs="0" />
+                          <xs:element name="metascoreIncrement" type="xs:string" minOccurs="0" />
+                          <xs:element name="metascoreOffset" type="xs:string" minOccurs="0" />
+                          <xs:element name="name" type="xs:string" minOccurs="0" />
+                          <xs:element name="ratingIdeal" type="xs:string" minOccurs="0" />
+                          <xs:element name="ratingIncrement" type="xs:string" minOccurs="0" />
+                          <xs:element name="ratingOffset" type="xs:string" minOccurs="0" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="trainingBays" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="trainingBay" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="lockId" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="unifiedDates" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="unifiedDate" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="dateTs" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="unlocks" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element name="xpLevels" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="xpLevel" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="buyCostId" type="xs:string" minOccurs="0" />
+                    <xs:element name="costId" type="xs:string" minOccurs="0" />
+                    <xs:element name="fdMissionSpMultiplier" type="xs:string" minOccurs="0" />
+                    <xs:element name="fdMissionXpMultiplier" type="xs:string" minOccurs="0" />
+                    <xs:element name="heroId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="infusedSlotsMax" type="xs:string" minOccurs="0" />
+                    <xs:element name="level" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="pvpBonus" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="trainingDuration" type="xs:string" minOccurs="0" />
+                    <xs:element name="xp" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="actions" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="action" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="iconAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="sequenceNumber" type="xs:string" minOccurs="0" />
+                    <xs:element name="actionLevels" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="actionLevel" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="actionAttributes" type="xs:string" minOccurs="0" />
+                                <xs:element name="actionType" type="xs:string" minOccurs="0" />
+                                <xs:element name="animationId" type="xs:string" minOccurs="0" />
+                                <xs:element name="coolDownTurns" type="xs:string" minOccurs="0" />
+                                <xs:element name="cooldownGroup" type="xs:string" minOccurs="0" />
+                                <xs:element name="critical" type="xs:string" minOccurs="0" />
+                                <xs:element name="criticalChance" type="xs:string" minOccurs="0" />
+                                <xs:element name="description" type="xs:string" minOccurs="0" />
+                                <xs:element name="energy" type="xs:string" minOccurs="0" />
+                                <xs:element name="hitChance" type="xs:string" minOccurs="0" />
+                                <xs:element name="hits" type="xs:string" minOccurs="0" />
+                                <xs:element name="initialCooldown" type="xs:string" minOccurs="0" />
+                                <xs:element name="level" type="xs:string" minOccurs="0" />
+                                <xs:element name="lockId" type="xs:string" minOccurs="0" />
+                                <xs:element name="maxDmg" type="xs:string" minOccurs="0" />
+                                <xs:element name="maxDmgFlat" type="xs:string" minOccurs="0" />
+                                <xs:element name="minDmg" type="xs:string" minOccurs="0" />
+                                <xs:element name="minDmgFlat" type="xs:string" minOccurs="0" />
+                                <xs:element name="startCooledUp" type="xs:string" minOccurs="0" />
+                                <xs:element name="statusChance" type="xs:string" minOccurs="0" />
+                                <xs:element name="subActions" type="xs:string" minOccurs="0" />
+                                <xs:element name="statusEffects" type="xs:string" minOccurs="0" />
+                                <xs:element name="statusId" type="xs:string" minOccurs="0" />
+                                <xs:element name="statusTarget" type="xs:string" minOccurs="0" />
+                                <xs:element name="tags" type="xs:string" minOccurs="0" />
+                                <xs:element name="distressCallSetId" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="actionLevelStatuses" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="actionLevelStatus" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="actionId" type="xs:string" minOccurs="0" />
+                                <xs:element name="chance" type="xs:string" minOccurs="0" />
+                                <xs:element name="level" type="xs:string" minOccurs="0" />
+                                <xs:element name="recursive" type="xs:string" minOccurs="0" />
+                                <xs:element name="property" type="xs:string" minOccurs="0" />
+                                <xs:element name="requireHit" type="xs:string" minOccurs="0" />
+                                <xs:element name="statusId" type="xs:string" minOccurs="0" />
+                                <xs:element name="target" type="xs:string" minOccurs="0" />
+                                <xs:element name="visible" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="aiScriptRules" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="aiScriptRule" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="enemyOrTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="targetOrTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="targetNotTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="selfNotTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="selfOrTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="targetRule" type="xs:string" minOccurs="0" />
+                    <xs:element name="enemyNotTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="enemiesAlive" type="xs:string" minOccurs="0" />
+                    <xs:element name="selfHpMax" type="xs:string" minOccurs="0" />
+                    <xs:element name="selfHpMin" type="xs:string" minOccurs="0" />
+                    <xs:element name="alliesAlive" type="xs:string" minOccurs="0" />
+                    <xs:element name="roundNum" type="xs:string" minOccurs="0" />
+                    <xs:element name="enemyAvgHpMax" type="xs:string" minOccurs="0" />
+                    <xs:element name="enemyAvgHpMin" type="xs:string" minOccurs="0" />
+                    <xs:element name="enemyLowHpMin" type="xs:string" minOccurs="0" />
+                    <xs:element name="lastTargetHpMin" type="xs:string" minOccurs="0" />
+                    <xs:element name="enemyLowHpMax" type="xs:string" minOccurs="0" />
+                    <xs:element name="lastTargetHpMax" type="xs:string" minOccurs="0" />
+                    <xs:element name="allyLowHpMin" type="xs:string" minOccurs="0" />
+                    <xs:element name="allyLowHpMax" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="aiScripts" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="aiScript" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="actionId" type="xs:string" minOccurs="0" />
+                    <xs:element name="aiScriptRuleId" type="xs:string" minOccurs="0" />
+                    <xs:element name="characterId" type="xs:string" minOccurs="0" />
+                    <xs:element name="combatType" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="priority" type="xs:string" minOccurs="0" />
+                    <xs:element name="weight" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="combatEncounters" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="combatEncounter" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="agentMaxLevel" type="xs:string" minOccurs="0" />
+                    <xs:element name="agentMinLevel" type="xs:string" minOccurs="0" />
+                    <xs:element name="groupBossEncounterName" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="mainVillainId" type="xs:string" minOccurs="0" />
+                    <xs:element name="wave1Villain1VillainId" type="xs:string" minOccurs="0" />
+                    <xs:element name="wave1Villain2VillainId" type="xs:string" minOccurs="0" />
+                    <xs:element name="wave1Villain3VillainId" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="combatTables" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="combatTable" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="combatTableEncounters" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="combatTableEncounter" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="combatEncounterId" type="xs:string" minOccurs="0" />
+                                <xs:element name="weight" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="costs" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="cost" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="challengePoints" type="xs:string" minOccurs="0" />
+                    <xs:element name="hardCurrency" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="itemCollectionId" type="xs:string" minOccurs="0" />
+                    <xs:element name="softCurrency" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="cumulativeRewards" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="cumulativeReward" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="dayNumber" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="respinCount" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardType" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="dangerRoomSets" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="dangerRoomSet" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="displayName" type="xs:string" minOccurs="0" />
+                    <xs:element name="expireTime" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="lockId" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                    <xs:element name="sortOrder" type="xs:string" minOccurs="0" />
+                    <xs:element name="startDialogId" type="xs:string" minOccurs="0" />
+                    <xs:element name="startTime" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="dangerRoomVillains" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="dangerRoomVillain" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="appearanceDate" type="xs:string" minOccurs="0" />
+                    <xs:element name="comicAppearance" type="xs:string" minOccurs="0" />
+                    <xs:element name="dangerRoomEventId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="maaAppearance" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="sortOrder" type="xs:string" minOccurs="0" />
+                    <xs:element name="villainId" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="dialogActionLabels" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="dialogActionLabel" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="dialogGroups" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="dialogGroup" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="dialogs" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="dialog" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="blocking" type="xs:string" minOccurs="0" />
+                                <xs:element name="characterId" type="xs:string" minOccurs="0" />
+                                <xs:element name="displayName" type="xs:string" minOccurs="0" />
+                                <xs:element name="flip" type="xs:string" minOccurs="0" />
+                                <xs:element name="heroId" type="xs:string" minOccurs="0" />
+                                <xs:element name="imageAssetId" type="xs:string" minOccurs="0" />
+                                <xs:element name="layout" type="xs:string" minOccurs="0" />
+                                <xs:element name="message" type="xs:string" minOccurs="0" />
+                                <xs:element name="name" type="xs:string" minOccurs="0" />
+                                <xs:element name="sequenceNum" type="xs:string" minOccurs="0" />
+                                <xs:element name="title" type="xs:string" minOccurs="0" />
+                                <xs:element name="dialogActions" minOccurs="0" maxOccurs="unbounded">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="dialogAction" minOccurs="0" maxOccurs="unbounded">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element name="action" type="xs:string" minOccurs="0" />
+                                            <xs:element name="buttonSequence" type="xs:string" minOccurs="0" />
+                                            <xs:element name="label" type="xs:string" minOccurs="0" />
+                                            <xs:element name="name" type="xs:string" minOccurs="0" />
+                                            <xs:element name="nextActionId" type="xs:string" minOccurs="0" />
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="distressCallSets" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="distressCallSet" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="distressCalls" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="distressCall" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="actionId" type="xs:string" minOccurs="0" />
+                                <xs:element name="heroId" type="xs:string" minOccurs="0" />
+                                <xs:element name="id" type="xs:string" minOccurs="0" />
+                                <xs:element name="weight" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="itemCollections" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="itemCollection" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="itemCollectionMembers" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="itemCollectionMember" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="itemId" type="xs:string" minOccurs="0" />
+                                <xs:element name="qty" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="locks" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="lock" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="itemCollectionId" type="xs:string" minOccurs="0" />
+                    <xs:element name="lockAttributes" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="lockAttribute" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="name" type="xs:string" minOccurs="0" />
+                                <xs:element name="value" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="lootTables" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="lootTable" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="lootType" type="xs:string" minOccurs="0" />
+                    <xs:element name="lootTableRewards" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="lootTableReward" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="agentLevelMax" type="xs:string" minOccurs="0" />
+                                <xs:element name="agentLevelMin" type="xs:string" minOccurs="0" />
+                                <xs:element name="expireDate" type="xs:string" minOccurs="0" />
+                                <xs:element name="childLootTableId" type="xs:string" minOccurs="0" />
+                                <xs:element name="minSpecOpsMastery" type="xs:string" minOccurs="0" />
+                                <xs:element name="maxSpecOpsMastery" type="xs:string" minOccurs="0" />
+                                <xs:element name="rewardId" type="xs:string" minOccurs="0" />
+                                <xs:element name="startDate" type="xs:string" minOccurs="0" />
+                                <xs:element name="weight" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="parties" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="party" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="description" type="xs:string" minOccurs="0" />
+                    <xs:element name="displayName" type="xs:string" minOccurs="0" />
+                    <xs:element name="expirationTime" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="maxPartySize" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="toastDialogId" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="partyHeroes" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="partyHero" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="filterParties" type="xs:string" minOccurs="0" />
+                    <xs:element name="heroIdList" type="xs:string" minOccurs="0" />
+                    <xs:element name="heroLevel" type="xs:string" minOccurs="0" />
+                    <xs:element name="heroTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="listType" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="partyId" type="xs:string" minOccurs="0" />
+                    <xs:element name="partyName" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="rewards" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="reward" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="description" type="xs:string" minOccurs="0" />
+                    <xs:element name="iconAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="xp" type="xs:string" minOccurs="0" />
+                    <xs:element name="itemCollectionId" type="xs:string" minOccurs="0" />
+                    <xs:element name="softCurrency" type="xs:string" minOccurs="0" />
+                    <xs:element name="hardCurrency" type="xs:string" minOccurs="0" />
+                    <xs:element name="energy" type="xs:string" minOccurs="0" />
+                    <xs:element name="challengePoints" type="xs:string" minOccurs="0" />
+                    <xs:element ref="unlocks" minOccurs="0" maxOccurs="unbounded" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="statuses" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="status" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="actionNotTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="actionOrTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="archetype" type="xs:string" minOccurs="0" />
+                    <xs:element name="animId" type="xs:string" minOccurs="0" />
+                    <xs:element name="characterNotTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="characterOrTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="className" type="xs:string" minOccurs="0" />
+                    <xs:element name="count" type="xs:string" minOccurs="0" />
+                    <xs:element name="description" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="duration" type="xs:string" minOccurs="0" />
+                    <xs:element name="durationOn" type="xs:string" minOccurs="0" />
+                    <xs:element name="iconAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="iconBg" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="isBoon" type="xs:string" minOccurs="0" />
+                    <xs:element name="minLevel" type="xs:string" minOccurs="0" />
+                    <xs:element name="spawnStatusId" type="xs:string" minOccurs="0" />
+                    <xs:element name="permanent" type="xs:string" minOccurs="0" />
+                    <xs:element name="stackMax" type="xs:string" minOccurs="0" />
+                    <xs:element name="statusOrTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="tags" type="xs:string" minOccurs="0" />
+                    <xs:element name="triggerChance" type="xs:string" minOccurs="0" />
+                    <xs:element name="triggersOn" type="xs:string" minOccurs="0" />
+                    <xs:element name="weight" type="xs:string" minOccurs="0" />
+                    <xs:element name="target" type="xs:string" minOccurs="0" />
+                    <xs:element name="add" type="xs:string" minOccurs="0" />
+                    <xs:element name="visible" type="xs:string" minOccurs="0" />
+                    <xs:element name="remove" type="xs:string" minOccurs="0" />
+                    <xs:element name="targetNotTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="targetOrTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="requireHit" type="xs:string" minOccurs="0" />
+                    <xs:element name="useAction" type="xs:string" minOccurs="0" />
+                    <xs:element name="priority" type="xs:string" minOccurs="0" />
+                    <xs:element name="stackGroup" type="xs:string" minOccurs="0" />
+                    <xs:element name="scalarType" type="xs:string" minOccurs="0" />
+                    <xs:element name="actorNotTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="actorOrTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="extra" type="xs:string" minOccurs="0" />
+                    <xs:element name="rating" type="xs:string" minOccurs="0" />
+                    <xs:element name="oneUp" type="xs:string" minOccurs="0" />
+                    <xs:element name="allowChains" type="xs:string" minOccurs="0" />
+                    <xs:element name="useTarget" type="xs:string" minOccurs="0" />
+                    <xs:element name="statusNotTags" type="xs:string" minOccurs="0" />
+                    <xs:element name="maxCountersPerRound" type="xs:string" minOccurs="0" />
+                    <xs:element name="dialogGroup" type="xs:string" minOccurs="0" />
+                    <xs:element name="characterHpMin" type="xs:string" minOccurs="0" />
+                    <xs:element name="min" type="xs:string" minOccurs="0" />
+                    <xs:element name="characterHpMax" type="xs:string" minOccurs="0" />
+                    <xs:element name="actorHpMax" type="xs:string" minOccurs="0" />
+                    <xs:element name="inTray" type="xs:string" minOccurs="0" />
+                    <xs:element name="enemy" type="xs:string" minOccurs="0" />
+                    <xs:element name="area" type="xs:string" minOccurs="0" />
+                    <xs:element name="all" type="xs:string" minOccurs="0" />
+                    <xs:element name="ally" type="xs:string" minOccurs="0" />
+                    <xs:element name="defense" type="xs:string" minOccurs="0" />
+                    <xs:element name="myTeam" type="xs:string" minOccurs="0" />
+                    <xs:element name="targetHpMax" type="xs:string" minOccurs="0" />
+                    <xs:element name="flat" type="xs:string" minOccurs="0" />
+                    <xs:element name="targetHpMin" type="xs:string" minOccurs="0" />
+                    <xs:element name="actorHpMin" type="xs:string" minOccurs="0" />
+                    <xs:element name="characterApMax" type="xs:string" minOccurs="0" />
+                    <xs:element name="sortOrder" type="xs:string" minOccurs="0" />
+                    <xs:element name="characterApMin" type="xs:string" minOccurs="0" />
+                    <xs:element name="requireHitOnMe" type="xs:string" minOccurs="0" />
+                    <xs:element name="actionAnimId" type="xs:string" minOccurs="0" />
+                    <xs:element name="scalar" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:simpleContent msdata:ColumnName="scalar_Text" msdata:Ordinal="0">
+                          <xs:extension base="xs:string">
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="children" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="child" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:simpleContent msdata:ColumnName="child_Text" msdata:Ordinal="0">
+                                <xs:extension base="xs:string">
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="statusArchetypes" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="statusArchetype" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="iconBg" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="inTray" type="xs:string" minOccurs="0" />
+                    <xs:element name="isBoon" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="oneUp" type="xs:string" minOccurs="0" />
+                    <xs:element name="sortOrder" type="xs:string" minOccurs="0" />
+                    <xs:element name="visible" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="villains" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="villain" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="accuracyRating" type="xs:string" minOccurs="0" />
+                    <xs:element name="attackRating" type="xs:string" minOccurs="0" />
+                    <xs:element name="baseVillainId" type="xs:string" minOccurs="0" />
+                    <xs:element name="bio" type="xs:string" minOccurs="0" />
+                    <xs:element name="cogAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="cogBio" type="xs:string" minOccurs="0" />
+                    <xs:element name="cogName" type="xs:string" minOccurs="0" />
+                    <xs:element name="controller" type="xs:string" minOccurs="0" />
+                    <xs:element name="defaultCounter" type="xs:string" minOccurs="0" />
+                    <xs:element name="defenseRating" type="xs:string" minOccurs="0" />
+                    <xs:element name="description" type="xs:string" minOccurs="0" />
+                    <xs:element name="dispName" type="xs:string" minOccurs="0" />
+                    <xs:element name="evasionRating" type="xs:string" minOccurs="0" />
+                    <xs:element name="friendBarIconAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="healthRating" type="xs:string" minOccurs="0" />
+                    <xs:element name="iconAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="id" type="xs:string" minOccurs="0" />
+                    <xs:element name="initiative" type="xs:string" minOccurs="0" />
+                    <xs:element name="morphSwfAssetIds" type="xs:string" minOccurs="0" />
+                    <xs:element name="largeAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="name" type="xs:string" minOccurs="0" />
+                    <xs:element name="rightAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="rpsType" type="xs:string" minOccurs="0" />
+                    <xs:element name="staminaRating" type="xs:string" minOccurs="0" />
+                    <xs:element name="swfAssetId" type="xs:string" minOccurs="0" />
+                    <xs:element name="tags" type="xs:string" minOccurs="0" />
+                    <xs:element name="xp" type="xs:string" minOccurs="0" />
+                    <xs:element name="statusIds" type="xs:string" minOccurs="0" />
+                    <xs:element name="villainActions" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="villainAction" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="actionId" type="xs:string" minOccurs="0" />
+                                <xs:element name="level" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="collectable" />
+        <xs:element ref="unlocks" />
+        <xs:element ref="data" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

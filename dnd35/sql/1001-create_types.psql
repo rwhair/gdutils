@@ -1,0 +1,51 @@
+set client_min_messages = warning;
+begin transaction;
+
+/*
+==============================
+d20.size
+==============================
+*/
+
+drop type if exists d20.size cascade;
+create type d20.size as enum (
+    'Fine',
+    'Diminutive',
+    'Tiny',
+    'Small',
+    'Medium',
+    'Large',
+    'Huge',
+    'Gargantuan',
+    'Colossal',
+    'Colossal+'
+);
+
+/*
+==============================
+d20.type
+==============================
+*/
+
+drop type if exists d20.type cascade;
+create type d20.type as enum (
+    'Aberration',
+    'Animal',
+    'Construct',
+    'Dragon',
+    'Elemental',
+    'Fey',
+    'Giant',
+    'Humanoid',
+    'Magical Beast',
+    'Monstrous Humanoid',
+    'Ooze',
+    'Outsider',
+    'Plant',
+    'Undead',
+    'Vermin'
+);
+
+commit transaction;
+set client_min_messages = notice;
+

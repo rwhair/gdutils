@@ -1,0 +1,92 @@
+set client_min_messages = error;
+begin transaction;
+
+drop index if exists idx_json_import_sets cascade;
+create index idx_json_import_sets on json_import using gin(data);
+
+drop index if exists idx_json_import_cards cascade;
+create index idx_json_import_cards on json_import using gin((data->'cards'));
+
+/*
+====================
+json_sets_cards
+====================
+*/
+
+drop table if exists json_sets_cards cascade;
+create table json_sets_cards as
+select
+    s->>'code' as code, 
+    c->>'id' as id
+from json_import i, jsonb_each(i.data) as ss(sc, s), jsonb_array_elements(s->'cards') cc(c);
+
+/*
+====================
+json_sets
+====================
+*/
+
+drop table if exists json_sets cascade;
+create table json_sets as
+select
+    s->>'name' as name,
+    s->>'code' as code,
+    s->>'gathererCode' as gathererCode,
+    s->>'oldCode' as oldCode,
+    s->>'magicCardsInfoCode' as magicCardsInfoCode,
+    s->>'releaseDate' as releaseDate,
+    s->>'border' as border,
+    s->>'type' as type,
+    s->>'block' as block,
+    s->>'onlineOnly' as onlineOnly,
+    s->'booster' as booster,
+    s->'cards' as cards
+from json_import i, jsonb_each(i.data) as ss(c, s);
+
+/*
+====================
+json_cards
+====================
+*/
+
+drop table if exists json_cards cascade;
+create table json_cards as
+select
+    c->>'id' as id,
+    c->>'layout' as layout,
+    c->>'name' as name,
+    (select array_agg(t) from jsonb_array_elements_text(c->'names') as t) as names,
+    c->>'manaCost' as manaCost,
+    c->>'cmc' as cmc,
+    (select array_agg(t) from jsonb_array_elements_text(c->'colors') as t) as colors,
+    (select array_agg(t) from jsonb_array_elements_text(c->'colorIdentity') as t) as colorIdentity,
+    c->>'type' as type,
+    (select array_agg(t) from jsonb_array_elements_text(c->'supertypes') as t) as supertypes,
+    (select array_agg(t) from jsonb_array_elements_text(c->'types') as t) as types,
+    (select array_agg(t) from jsonb_array_elements_text(c->'subtypes') as t) as subtypes,
+    c->>'rarity' as rarity,
+    c->>'text' as text,
+    c->>'flavor' as flavor,
+    c->>'artist' as artist,
+    c->>'number' as number,
+    c->>'power' as power,
+    c->>'toughness' as toughness,
+    c->>'loyalty' as loyalty,
+    c->>'multiverseid' as multiverseId,
+    (select array_agg(t) from jsonb_array_elements_text(c->'variations') as t) as variations,
+    c->>'imageName' as imageName,
+    c->>'watermark' as watermark,
+    c->>'border' as border,
+    c->>'timeshifted' as timeshifted,
+    c->>'hand' as hand,
+    c->>'life' as life,
+    c->>'reserved' as reserved,
+    c->>'releaseDate' as releaseDate,
+    c->>'starter' as starter,
+    c->>'mciNumber' as mciNumber
+from json_sets s, jsonb_array_elements(s.cards) cc(c)
+;
+
+
+set client_min_messages = notice;
+commit transaction;

@@ -1,0 +1,9 @@
+set client_min_messages = warning;
+begin transaction;
+
+drop schema if exists d20 cascade;
+create schema d20;
+
+commit transaction;
+set client_min_messages = notice;
+

@@ -1,0 +1,264 @@
+set client_min_messages = warning;
+begin transaction;
+
+drop view if exists d20.monsters_attack_summary cascade;
+create or replace view d20.monsters_attack_summary as
+select m.monster_id, min(m2.attack) as attack_low, max(m2.attack) as attack_high, min(m.damage) as damage_low, max(m.damage) as damage_high
+from (select monster_id, option_id, sum(damage) as damage from d20.monster_attack m group by monster_id, option_id) m
+join d20.monster_attack m2 on (m.monster_id = m2.monster_id and m.option_id = m2.option_id)
+group by m.monster_id;
+
+drop view if exists d20.monsters_by_adjusted_cr_linest cascade;
+create or replace view d20.monsters_by_adjusted_cr_linest as
+select
+    regr_slope(ln(hit_dice), ln(adjusted_challenge_rating)) as hit_dice_a,
+    exp(regr_intercept(ln(hit_dice), ln(adjusted_challenge_rating))) as hit_dice_b,
+    regr_r2(ln(hit_dice), ln(adjusted_challenge_rating)) as hit_dice_r2,
+    regr_slope(ln(hit_dice), ln(adjusted_challenge_rating)) as hit_points_a,
+    exp(regr_intercept(ln(hit_points), ln(adjusted_challenge_rating))) as hit_points_b,
+    regr_r2(ln(hit_points), ln(adjusted_challenge_rating)) as hit_points_r2,
+    regr_slope(armor_class, adjusted_challenge_rating) as armor_class_m,
+    regr_intercept(armor_class, adjusted_challenge_rating) as armor_class_b,
+    regr_r2(armor_class, adjusted_challenge_rating) as armor_class_r2,
+    regr_slope(attack_low, adjusted_challenge_rating) as attack_low_m,
+    regr_intercept(attack_low, adjusted_challenge_rating) as attack_low_b,
+    regr_r2(attack_low, adjusted_challenge_rating) as attack_low_r2,
+    regr_slope(attack_high, adjusted_challenge_rating) as attack_high_m,
+    regr_intercept(attack_high, adjusted_challenge_rating) as attack_high_b,
+    regr_r2(attack_high, adjusted_challenge_rating) as attack_high_r2,
+    regr_slope(ln(damage_low), ln(adjusted_challenge_rating)) as damage_low_a,
+    regr_r2(ln(damage_low), ln(adjusted_challenge_rating)) as damage_low_r2,
+    exp(regr_intercept(ln(damage_low), ln(adjusted_challenge_rating))) as damage_low_b,
+    regr_slope(ln(damage_high), ln(adjusted_challenge_rating)) as damage_high_a,
+    regr_r2(ln(damage_high), ln(adjusted_challenge_rating)) as damage_high_r2,
+    exp(regr_intercept(ln(damage_high), ln(adjusted_challenge_rating))) as damage_high_b,
+    regr_slope(greatest(fort_save, ref_save, will_save), adjusted_challenge_rating) as good_save_m,
+    regr_intercept(greatest(fort_save, ref_save, will_save), adjusted_challenge_rating) as good_save_b,
+    regr_r2(greatest(fort_save, ref_save, will_save), adjusted_challenge_rating) as good_save_r2,
+    regr_slope(least(fort_save, ref_save, will_save), adjusted_challenge_rating) as poor_save_m,
+    regr_intercept(least(fort_save, ref_save, will_save), adjusted_challenge_rating) as poor_save_b,
+    regr_r2(least(fort_save, ref_save, will_save), adjusted_challenge_rating) as poor_save_r2,
+    regr_slope(strength, adjusted_challenge_rating) as strength_m,
+    regr_intercept(strength, adjusted_challenge_rating) as strength_b,
+    regr_r2(strength, adjusted_challenge_rating) as strength_r2,
+    regr_slope(dexterity, adjusted_challenge_rating) as dexterity_m,
+    regr_intercept(dexterity, adjusted_challenge_rating) as dexterity_b,
+    regr_r2(dexterity, adjusted_challenge_rating) as dexterity_r2,
+    regr_slope(constitution, adjusted_challenge_rating) as constitution_m,
+    regr_intercept(constitution, adjusted_challenge_rating) as constitution_b,
+    regr_r2(constitution, adjusted_challenge_rating) as constitution_r2,
+    regr_slope(intelligence, adjusted_challenge_rating) as intelligence_m,
+    regr_intercept(intelligence, adjusted_challenge_rating) as intelligence_b,
+    regr_r2(intelligence, adjusted_challenge_rating) as intelligence_r2,
+    regr_slope(wisdom, adjusted_challenge_rating) as wisdom_m,
+    regr_intercept(wisdom, adjusted_challenge_rating) as wisdom_b,
+    regr_r2(wisdom, adjusted_challenge_rating) as wisdom_r2,
+    regr_slope(charisma, adjusted_challenge_rating) as charisma_m,
+    regr_intercept(charisma, adjusted_challenge_rating) as charisma_b,
+    regr_r2(charisma, adjusted_challenge_rating) as charisma_r2
+from d20.monster
+left outer join d20.monsters_attack_summary on (d20.monster.monster_id = d20.monsters_attack_summary.monster_id);
+
+drop view if exists d20.monsters_by_type_and_cr_linest cascade;
+create or replace view d20.monsters_by_type_and_cr_linest as
+select
+    type,
+    regr_slope(ln(hit_dice), ln(adjusted_challenge_rating)) as hit_dice_a,
+    exp(regr_intercept(ln(hit_dice), ln(adjusted_challenge_rating))) as hit_dice_b,
+    regr_r2(ln(hit_dice), ln(adjusted_challenge_rating)) as hit_dice_r2,
+    regr_slope(ln(hit_dice), ln(adjusted_challenge_rating)) as hit_points_a,
+    exp(regr_intercept(ln(hit_points), ln(adjusted_challenge_rating))) as hit_points_b,
+    regr_r2(ln(hit_points), ln(adjusted_challenge_rating)) as hit_points_r2,
+    regr_slope(armor_class, adjusted_challenge_rating) as armor_class_m,
+    regr_intercept(armor_class, adjusted_challenge_rating) as armor_class_b,
+    regr_r2(armor_class, adjusted_challenge_rating) as armor_class_r2,
+    regr_slope(attack_low, adjusted_challenge_rating) as attack_low_m,
+    regr_intercept(attack_low, adjusted_challenge_rating) as attack_low_b,
+    regr_r2(attack_low, adjusted_challenge_rating) as attack_low_r2,
+    regr_slope(attack_high, adjusted_challenge_rating) as attack_high_m,
+    regr_intercept(attack_high, adjusted_challenge_rating) as attack_high_b,
+    regr_r2(attack_high, adjusted_challenge_rating) as attack_high_r2,
+    regr_slope(ln(damage_low), ln(adjusted_challenge_rating)) as damage_low_a,
+    regr_r2(ln(damage_low), ln(adjusted_challenge_rating)) as damage_low_r2,
+    exp(regr_intercept(ln(damage_low), ln(adjusted_challenge_rating))) as damage_low_b,
+    regr_slope(ln(damage_high), ln(adjusted_challenge_rating)) as damage_high_a,
+    regr_r2(ln(damage_high), ln(adjusted_challenge_rating)) as damage_high_r2,
+    exp(regr_intercept(ln(damage_high), ln(adjusted_challenge_rating))) as damage_high_b,
+    regr_slope(fort_save, adjusted_challenge_rating) as fort_save_m,
+    regr_intercept(fort_save, adjusted_challenge_rating) as fort_save_b,
+    regr_r2(fort_save, adjusted_challenge_rating) as fort_save_r2,
+    regr_slope(ref_save, adjusted_challenge_rating) as ref_save_m,
+    regr_intercept(ref_save, adjusted_challenge_rating) as ref_save_b,
+    regr_r2(ref_save, adjusted_challenge_rating) as ref_save_r2,
+    regr_slope(fort_save, adjusted_challenge_rating) as will_save_m,
+    regr_intercept(fort_save, adjusted_challenge_rating) as will_save_b,
+    regr_r2(fort_save, adjusted_challenge_rating) as will_save_r2,
+    regr_slope(greatest(fort_save, ref_save, will_save), adjusted_challenge_rating) as good_save_m,
+    regr_intercept(greatest(fort_save, ref_save, will_save), adjusted_challenge_rating) as good_save_b,
+    regr_r2(greatest(fort_save, ref_save, will_save), adjusted_challenge_rating) as good_save_r2,
+    regr_slope(least(fort_save, ref_save, will_save), adjusted_challenge_rating) as poor_save_m,
+    regr_intercept(least(fort_save, ref_save, will_save), adjusted_challenge_rating) as poor_save_b,
+    regr_r2(least(fort_save, ref_save, will_save), adjusted_challenge_rating) as poor_save_r2,
+    regr_slope(strength, adjusted_challenge_rating) as strength_m,
+    regr_intercept(strength, adjusted_challenge_rating) as strength_b,
+    regr_r2(strength, adjusted_challenge_rating) as strength_r2,
+    regr_slope(dexterity, adjusted_challenge_rating) as dexterity_m,
+    regr_intercept(dexterity, adjusted_challenge_rating) as dexterity_b,
+    regr_r2(dexterity, adjusted_challenge_rating) as dexterity_r2,
+    regr_slope(constitution, adjusted_challenge_rating) as constitution_m,
+    regr_intercept(constitution, adjusted_challenge_rating) as constitution_b,
+    regr_r2(constitution, adjusted_challenge_rating) as constitution_r2,
+    regr_slope(intelligence, adjusted_challenge_rating) as intelligence_m,
+    regr_intercept(intelligence, adjusted_challenge_rating) as intelligence_b,
+    regr_r2(intelligence, adjusted_challenge_rating) as intelligence_r2,
+    regr_slope(wisdom, adjusted_challenge_rating) as wisdom_m,
+    regr_intercept(wisdom, adjusted_challenge_rating) as wisdom_b,
+    regr_r2(wisdom, adjusted_challenge_rating) as wisdom_r2,
+    regr_slope(charisma, adjusted_challenge_rating) as charisma_m,
+    regr_intercept(charisma, adjusted_challenge_rating) as charisma_b,
+    regr_r2(charisma, adjusted_challenge_rating) as charisma_r2
+from d20.monster
+left outer join d20.monsters_attack_summary on (d20.monster.monster_id = d20.monsters_attack_summary.monster_id)
+group by type;
+
+drop view if exists d20.monsters_by_size_and_cr_linest cascade;
+create or replace view d20.monsters_by_size_and_cr_linest as
+select
+    size,
+    regr_slope(ln(hit_dice), ln(adjusted_challenge_rating)) as hit_dice_a,
+    exp(regr_intercept(ln(hit_dice), ln(adjusted_challenge_rating))) as hit_dice_b,
+    regr_r2(ln(hit_dice), ln(adjusted_challenge_rating)) as hit_dice_r2,
+    regr_slope(ln(hit_dice), ln(adjusted_challenge_rating)) as hit_points_a,
+    exp(regr_intercept(ln(hit_points), ln(adjusted_challenge_rating))) as hit_points_b,
+    regr_r2(ln(hit_points), ln(adjusted_challenge_rating)) as hit_points_r2,
+    regr_slope(armor_class, adjusted_challenge_rating) as armor_class_m,
+    regr_intercept(armor_class, adjusted_challenge_rating) as armor_class_b,
+    regr_r2(armor_class, adjusted_challenge_rating) as armor_class_r2,
+    regr_slope(attack_low, adjusted_challenge_rating) as attack_low_m,
+    regr_intercept(attack_low, adjusted_challenge_rating) as attack_low_b,
+    regr_r2(attack_low, adjusted_challenge_rating) as attack_low_r2,
+    regr_slope(attack_high, adjusted_challenge_rating) as attack_high_m,
+    regr_intercept(attack_high, adjusted_challenge_rating) as attack_high_b,
+    regr_r2(attack_high, adjusted_challenge_rating) as attack_high_r2,
+    regr_slope(ln(damage_low), ln(adjusted_challenge_rating)) as damage_low_a,
+    regr_r2(ln(damage_low), ln(adjusted_challenge_rating)) as damage_low_r2,
+    exp(regr_intercept(ln(damage_low), ln(adjusted_challenge_rating))) as damage_low_b,
+    regr_slope(ln(damage_high), ln(adjusted_challenge_rating)) as damage_high_a,
+    regr_r2(ln(damage_high), ln(adjusted_challenge_rating)) as damage_high_r2,
+    exp(regr_intercept(ln(damage_high), ln(adjusted_challenge_rating))) as damage_high_b,
+    regr_slope(fort_save, adjusted_challenge_rating) as fort_save_m,
+    regr_intercept(fort_save, adjusted_challenge_rating) as fort_save_b,
+    regr_r2(fort_save, adjusted_challenge_rating) as fort_save_r2,
+    regr_slope(ref_save, adjusted_challenge_rating) as ref_save_m,
+    regr_intercept(ref_save, adjusted_challenge_rating) as ref_save_b,
+    regr_r2(ref_save, adjusted_challenge_rating) as ref_save_r2,
+    regr_slope(fort_save, adjusted_challenge_rating) as will_save_m,
+    regr_intercept(fort_save, adjusted_challenge_rating) as will_save_b,
+    regr_r2(fort_save, adjusted_challenge_rating) as will_save_r2,
+    regr_slope(greatest(fort_save, ref_save, will_save), adjusted_challenge_rating) as good_save_m,
+    regr_intercept(greatest(fort_save, ref_save, will_save), adjusted_challenge_rating) as good_save_b,
+    regr_r2(greatest(fort_save, ref_save, will_save), adjusted_challenge_rating) as good_save_r2,
+    regr_slope(least(fort_save, ref_save, will_save), adjusted_challenge_rating) as poor_save_m,
+    regr_intercept(least(fort_save, ref_save, will_save), adjusted_challenge_rating) as poor_save_b,
+    regr_r2(least(fort_save, ref_save, will_save), adjusted_challenge_rating) as poor_save_r2,
+    regr_slope(strength, adjusted_challenge_rating) as strength_m,
+    regr_intercept(strength, adjusted_challenge_rating) as strength_b,
+    regr_r2(strength, adjusted_challenge_rating) as strength_r2,
+    regr_slope(dexterity, adjusted_challenge_rating) as dexterity_m,
+    regr_intercept(dexterity, adjusted_challenge_rating) as dexterity_b,
+    regr_r2(dexterity, adjusted_challenge_rating) as dexterity_r2,
+    regr_slope(constitution, adjusted_challenge_rating) as constitution_m,
+    regr_intercept(constitution, adjusted_challenge_rating) as constitution_b,
+    regr_r2(constitution, adjusted_challenge_rating) as constitution_r2,
+    regr_slope(intelligence, adjusted_challenge_rating) as intelligence_m,
+    regr_intercept(intelligence, adjusted_challenge_rating) as intelligence_b,
+    regr_r2(intelligence, adjusted_challenge_rating) as intelligence_r2,
+    regr_slope(wisdom, adjusted_challenge_rating) as wisdom_m,
+    regr_intercept(wisdom, adjusted_challenge_rating) as wisdom_b,
+    regr_r2(wisdom, adjusted_challenge_rating) as wisdom_r2,
+    regr_slope(charisma, adjusted_challenge_rating) as charisma_m,
+    regr_intercept(charisma, adjusted_challenge_rating) as charisma_b,
+    regr_r2(charisma, adjusted_challenge_rating) as charisma_r2
+from d20.monster
+left outer join d20.monsters_attack_summary on (d20.monster.monster_id = d20.monsters_attack_summary.monster_id)
+group by size;
+
+
+drop view if exists d20.monsters_adjusted_cr cascade;
+create or replace view d20.monsters_adjusted_cr as
+select distinct adjusted_challenge_rating as challenge_rating 
+from d20.monster
+order by adjusted_challenge_rating;
+
+drop view if exists d20.monsters_by_adjusted_cr cascade;
+create or replace view d20.monsters_by_adjusted_cr as
+select  
+    challenge_rating,
+    round((hit_dice_b * power(challenge_rating, hit_dice_a)) :: numeric, case when (hit_dice_b * power(challenge_rating, hit_dice_a)) < (0.67) then 2 else 0 end) as hit_dice,
+    round((hit_points_b * power(challenge_rating, hit_points_a))) as hit_points,
+    round((armor_class_m * challenge_rating) + armor_class_b) as armor_class,
+    round((attack_low_m * challenge_rating) + attack_low_b) as attack_low,
+    round((attack_high_m * challenge_rating) + attack_high_b) as attack_high,
+    round((damage_low_b * power(challenge_rating, damage_low_a))) as damage_low,
+    round((damage_high_b * power(challenge_rating, damage_high_a))) as damage_high,
+    round((good_save_m * challenge_rating) + good_save_b) as good_save,
+    round((poor_save_m * challenge_rating) + poor_save_b) as poor_save,
+    round((strength_m * challenge_rating) + strength_b) as strength,
+    round((dexterity_m * challenge_rating) + dexterity_b) as dexterity,
+    round((constitution_m * challenge_rating) + constitution_b) as constitution,
+    round((intelligence_m * challenge_rating) + intelligence_b) as intelligence,
+    round((wisdom_m * challenge_rating) + wisdom_b) as wisdom,
+    round((charisma_m * challenge_rating) + charisma_b) as charisma
+from d20.monsters_adjusted_cr, d20.monsters_by_adjusted_cr_linest
+order by challenge_rating;
+
+drop view if exists d20.monsters_by_type_and_cr cascade;
+create or replace view d20.monsters_by_type_and_cr as
+select  
+    type,
+    challenge_rating,
+    round((hit_dice_b * power(challenge_rating, hit_dice_a)) :: numeric, case when (hit_dice_b * power(challenge_rating, hit_dice_a)) < (0.67) then 2 else 0 end) as hit_dice,
+    round((hit_points_b * power(challenge_rating, hit_points_a))) as hit_points,
+    round((armor_class_m * challenge_rating) + armor_class_b) as armor_class,
+    round((attack_low_m * challenge_rating) + attack_low_b) as attack_low,
+    round((attack_high_m * challenge_rating) + attack_high_b) as attack_high,
+    round((damage_low_b * power(challenge_rating, damage_low_a))) as damage_low,
+    round((damage_high_b * power(challenge_rating, damage_high_a))) as damage_high,
+    round((fort_save_m * challenge_rating) + fort_save_b) as fort_save,
+    round((ref_save_m * challenge_rating) + ref_save_b) as ref_save,
+    round((will_save_m * challenge_rating) + will_save_b) as will_save,
+    round((strength_m * challenge_rating) + strength_b) as strength,
+    round((dexterity_m * challenge_rating) + dexterity_b) as dexterity,
+    round((constitution_m * challenge_rating) + constitution_b) as constitution,
+    round((intelligence_m * challenge_rating) + intelligence_b) as intelligence,
+    round((wisdom_m * challenge_rating) + wisdom_b) as wisdom,
+    round((charisma_m * challenge_rating) + charisma_b) as charisma
+from d20.monsters_adjusted_cr, d20.monsters_by_type_and_cr_linest
+order by type, challenge_rating;
+
+drop view if exists d20.monsters_by_size_and_cr cascade;
+create or replace view d20.monsters_by_size_and_cr as
+select  
+    size,
+    challenge_rating,
+    round((hit_dice_b * power(challenge_rating, hit_dice_a)) :: numeric, case when (hit_dice_b * power(challenge_rating, hit_dice_a)) < (0.67) then 2 else 0 end) as hit_dice,
+    round((hit_points_b * power(challenge_rating, hit_points_a))) as hit_points,
+    round((armor_class_m * challenge_rating) + armor_class_b) as armor_class,
+    round((attack_low_m * challenge_rating) + attack_low_b) as attack_low,
+    round((attack_high_m * challenge_rating) + attack_high_b) as attack_high,
+    round((damage_low_b * power(challenge_rating, damage_low_a))) as damage_low,
+    round((damage_high_b * power(challenge_rating, damage_high_a))) as damage_high,
+    round((fort_save_m * challenge_rating) + fort_save_b) as fort_save,
+    round((ref_save_m * challenge_rating) + ref_save_b) as ref_save,
+    round((will_save_m * challenge_rating) + will_save_b) as will_save,
+    round((strength_m * challenge_rating) + strength_b) as strength,
+    round((dexterity_m * challenge_rating) + dexterity_b) as dexterity,
+    round((constitution_m * challenge_rating) + constitution_b) as constitution,
+    round((intelligence_m * challenge_rating) + intelligence_b) as intelligence,
+    round((wisdom_m * challenge_rating) + wisdom_b) as wisdom,
+    round((charisma_m * challenge_rating) + charisma_b) as charisma
+from d20.monsters_adjusted_cr, d20.monsters_by_size_and_cr_linest
+order by size, challenge_rating;
+
+commit transaction;
+set client_min_messages = notice;
