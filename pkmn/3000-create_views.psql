@@ -1,0 +1,68 @@
+set client_min_messages = warning;
+start transaction;
+
+drop schema if exists json cascade;
+create schema json;
+
+create or replace view json.card as
+select
+    cc->>   'id'                    as id,
+    cc->>   'name'                  as name,
+    cc->>   'nationalPokedexNumber' as national_pokedex_number,
+    cc->>   'imageUrl'              as image_url,
+    cc->>   'subtype'               as subtype,
+    cc->>   'supertype'             as supertype,
+    cc->    'ability'               as ability,
+    cc->>   'hp'                    as hp,
+    cc->    'retreatCost'           as retreat_cost,
+    cc->>   'number'                as number,
+    cc->>   'artist'                as artist,
+    cc->>   'rarity'                as rarity,
+    cc->>   'series'                as series,
+    cc->>   'set'                   as set_name,
+    cc->>   'setCode'               as set_code,
+    cc->    'types'                 as types,
+    cc->    'attacks'               as attacks,
+    cc->    'weaknesses'            as weaknesses,
+    cc->    'resistances'           as resistances
+from import.files, jsonb_array_elements(data->'cards') cc;
+
+create or replace view json.card_ability as
+select
+    c.id                            as card_id,
+    c.ability->>'name'              as name,
+    c.ability->>'text'              as text
+from json.card c;
+
+create or replace view json.card_type as
+select
+    c.id                            as card_id,
+    t.value                         as type
+from json.card c, jsonb_array_elements(c.types) t(value);
+
+create or replace view json.card_attack as
+select
+    c.id                                as card_id,
+    a.attack->'cost'                    as cost,
+    a.attack->>'name'                   as name,
+    a.attack->>'text'                   as text,
+    a.attack->>'damage'                 as damage,
+    a.attack->>'convertedEnergyCost'    as converted_energy_cost
+from json.card c, jsonb_array_elements(c.attacks) a(attack);
+
+create or replace view json.card_weakness as
+select
+    c.id                                as card_id,
+    w.weakness->>'type'                 as type,
+    w.weakness->>'value'                as value
+from json.card c, jsonb_array_elements(c.weaknesses) w(weakness);
+
+create or replace view json.card_resistance as
+select
+    c.id                                as card_id,
+    r.resistance->>'type'               as type,
+    r.resistance->>'value'              as value
+from json.card c, jsonb_array_elements(c.resistances) r(resistance);
+
+commit transaction;
+set client_min_messages = error;

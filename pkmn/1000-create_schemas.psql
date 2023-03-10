@@ -1,0 +1,11 @@
+set client_min_messages = warning;
+start transaction;
+
+drop schema if exists json cascade;
+create schema json;
+
+drop schema if exists pkmn cascade;
+create schema pkmn;
+
+commit transaction;
+set client_min_messages = error;

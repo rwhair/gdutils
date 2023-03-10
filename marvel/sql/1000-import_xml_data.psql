@@ -1,0 +1,15 @@
+set client_min_messages = error;
+begin transaction;
+
+drop schema if exists import cascade;
+create schema import;
+
+drop table if exists import.client cascade;
+create table import.client(doc xml);
+
+\set content `cat ../xml/client.xml`
+insert into import.client(doc) 
+select xmlparse(document :'content');
+
+end transaction;
+set client_min_messages = notice;

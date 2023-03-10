@@ -1,0 +1,40 @@
+set client_min_messages = warning;
+start transaction;
+
+create or replace function pkmn.parse_hp(value character varying) returns integer as $$
+    select case value when 'None' then null else value end :: integer
+$$ language sql stable;
+
+create or replace function pkmn.parse_damage(value character varying) returns integer as $$
+    select case when length(trim(value)) = 0 then null else value end :: integer
+    from (select regexp_replace(value, '[^\d]', '', 'g') as value) t
+$$ language sql stable;
+
+create or replace function pkmn.parse_type(value character varying) returns character varying as $$
+   select case value
+        when 'Grass'        then 'G'
+        when 'Water'        then 'W'
+        when 'Fire'         then 'R'
+        when 'Lightning'    then 'L'
+        when 'Fighting'     then 'F'
+        when 'Psychic'      then 'P'
+        when 'Darkness'     then 'D'
+        when 'Metal'        then 'M'
+        when 'Dragon'       then 'N'
+        when 'Fairy'        then 'Y'
+        when 'Colorless'    then 'C'
+        when 'Free'         then ''
+        else                     '?'
+    end;
+$$ language sql stable;
+
+create or replace function pkmn.parse_types(types jsonb) returns character varying as $_$
+    select string_agg(pkmn.parse_type(value), '') from (
+        select value 
+        from jsonb_array_elements_text(types) as type(value) 
+        order by value
+    ) t
+$_$ language sql stable;
+
+commit transaction;
+set client_min_messages = error;

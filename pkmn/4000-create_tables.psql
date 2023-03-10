@@ -1,0 +1,69 @@
+set client_min_messages = warning;
+start transaction;
+
+drop table if exists pkmn.card cascade;
+create table pkmn.card as
+select
+    id :: character varying as card_id,
+    name :: character varying,
+    national_pokedex_number :: integer,
+    subtype :: character varying,
+    supertype :: character varying,
+    pkmn.parse_hp(hp) as hp,
+    pkmn.parse_types(retreat_cost) as retreat_cost
+from json.card
+where id not in ('ecard2-50', 'ecard2-74', 'ecard2-95', 'ecard2-103');
+
+drop table if exists pkmn.card_ability cascade;
+create table pkmn.card_ability as
+select
+    card_id :: character varying,
+    name :: character varying,
+    text :: character varying
+from json.card_ability;
+
+drop table if exists pkmn.card_attack cascade;
+create table pkmn.card_attack as
+select
+    card_id :: character varying,
+    name :: character varying,
+    converted_energy_cost :: integer as cost,    
+    pkmn.parse_types(cost) as energy,
+    pkmn.parse_damage(damage) as damage,
+    case when length(trim(text)) = 0 then null else text end :: character varying as text
+from json.card_attack;
+
+update pkmn.card_attack set cost = 0 where length(energy) = 0;
+
+update pkmn.card_attack set text = replace(text, pkmn.card.name, 'CARDNAME')
+from pkmn.card where pkmn.card.card_id = pkmn.card_attack.card_id;
+
+/*
+select
+    percentile_cont(0.5) within group (order by damage / (cost + (length(regexp_replace(energy, 'C', '', 'g')) * 0.5)))
+from pkmn.card_attack
+where cost > 0 and damage > 0 and text is null;
+*/
+
+/*
+select
+    percentile_cont(0.5) within group (order by (cost + (length(regexp_replace(energy, 'C', '', 'g')) * 0.5)) - (coalesce(damage, 0) / 10)) as value,
+    text
+from pkmn.card_attack
+group by text
+order by value desc;
+*/
+
+/*
+select avg(damage / cost) as damage_per_energy from pkmn.card_attack
+where cost <> 0 and damage <> 0 and text is null
+
+select avg(damage / cost) as damage_per_energy from pkmn.card_attack
+where cost <> 0 and damage <> 0 and text is not null
+
+select avg(damage / cost) as damage_per_energy from pkmn.card_attack
+where cost <> 0 and damage <> 0 and text is not null
+*/
+
+commit transaction;
+set client_min_messages = error;

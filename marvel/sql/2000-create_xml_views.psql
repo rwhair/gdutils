@@ -1,0 +1,1157 @@
+set client_min_messages = error;
+begin transaction;
+
+create or replace function xtext(xml, text) returns character varying as $$
+    select (xpath($2 || '/text()', $1))[1] :: character varying
+$$ language sql stable;
+
+drop view if exists import.data cascade;
+create or replace view import.data as
+select
+    (xpath('/data/utcTimestamp/text()', doc))[1] :: character varying   as utc_timestamp,
+    (xpath('/data/pstTimestamp/text()', doc))[1] :: character varying   as pst_timestamp,
+    (xpath('/data/actionTags', doc))[1]            as actionTags,
+    (xpath('/data/advisors', doc))[1]              as advisors,
+    (xpath('/data/baseVillains', doc))[1]          as baseVillains,
+    (xpath('/data/bundles', doc))[1]               as bundles,
+    (xpath('/data/chapterTrackRewards', doc))[1]   as chapterTrackRewards,
+    (xpath('/data/chapters', doc))[1]              as chapters,
+    (xpath('/data/collectable', doc))[1]           as collectable,
+    (xpath('/data/combatLetterGrades', doc))[1]    as combatLetterGrades,
+    (xpath('/data/fdLeases', doc))[1]              as fdLeases,
+    (xpath('/data/fdMissions', doc))[1]            as fdMissions,
+    (xpath('/data/fdPlanes', doc))[1]              as fdPlanes,
+    (xpath('/data/flightDeckAircrafts', doc))[1]   as flightDeckAircrafts,
+    (xpath('/data/flightDeckMaps', doc))[1]        as flightDeckMaps,
+    (xpath('/data/flightDeckSlots', doc))[1]       as flightDeckSlots,
+    (xpath('/data/gropuBosses', doc))[1]           as groupBosses,
+    (xpath('/data/heroes', doc))[1]                as heroes,
+    (xpath('/data/localeStrings', doc))[1]         as localeStrings,
+    (xpath('/data/lockboxCollections', doc))[1]    as lockboxCollections,
+    (xpath('/data/missionPaths', doc))[1]          as missionPaths,
+    (xpath('/data/missions', doc))[1]              as missions,
+    (xpath('/data/questPriorities', doc))[1]       as questPriorities,
+    (xpath('/data/questTasks', doc))[1]            as questTasks,
+    (xpath('/data/quests', doc))[1]                as quests,
+    (xpath('/data/reconMissions', doc))[1]         as reconMissions,
+    (xpath('/data/researches', doc))[1]            as researches,
+    (xpath('/data/secretChapters', doc))[1]        as secretChapters,
+    (xpath('/data/soundSettings', doc))[1]         as soundSettings,
+    (xpath('/data/staticSettings', doc))[1]        as staticSettings,
+    (xpath('/data/storeTags', doc))[1]             as storeTags,
+    (xpath('/data/taskListCheckpoints', doc))[1]   as taskListCheckpoints,
+    (xpath('/data/taskLists', doc))[1]             as taskLists,
+    (xpath('/data/tournamentLeagues', doc))[1]     as tournamentLeagues,
+    (xpath('/data/trainingBays', doc))[1]          as trainingBays,
+    (xpath('/data/unifiedDates', doc))[1]          as unifiedDates,
+    (xpath('/data/unlocks', doc))[1]               as unlocks,
+    (xpath('/data/xpLevels', doc))[1]              as xpLevels,
+    (xpath('/data/actions', doc))[1]               as actions,
+    (xpath('/data/aiScriptRules', doc))[1]         as aiScriptRules,
+    (xpath('/data/aiScripts', doc))[1]             as aiScripts,
+    (xpath('/data/combatEncounters', doc))[1]      as combatEncounters,
+    (xpath('/data/combatTables', doc))[1]          as combatTables,
+    (xpath('/data/costs', doc))[1]                 as costs,
+    (xpath('/data/cumulativeRewards', doc))[1]     as cumulativeRewards,
+    (xpath('/data/dangerRoomSets', doc))[1]        as dangerRoomSets,
+    (xpath('/data/dangerRoomVillains', doc))[1]    as dangerRoomVillains,
+    (xpath('/data/dialogActionLabels', doc))[1]    as dialogActionLabels,
+    (xpath('/data/dialogGroups', doc))[1]          as dialogGroups,
+    (xpath('/data/distressCallSets', doc))[1]      as distressCallSets,
+    (xpath('/data/itemCollections', doc))[1]       as itemCollections,
+    (xpath('/data/locks', doc))[1]                 as locks,
+    (xpath('/data/lootTables', doc))[1]            as lootTables,
+    (xpath('/data/parties', doc))[1]               as parties,
+    (xpath('/data/partyHeroes', doc))[1]           as partyHeroes,
+    (xpath('/data/rewards', doc))[1]               as rewards,
+    (xpath('/data/statuses', doc))[1]              as statuses,
+    (xpath('/data/statusArchetypes', doc))[1]      as statusArchetypes,
+    (xpath('/data/villains', doc))[1]              as villains
+from import.client;
+
+drop view if exists import.actionTags cascade;
+create or replace view import.actionTags as
+select
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'name') as name,
+    xtext(n, 'statusId') as statusId
+from import.data, unnest(xpath('actionTag', actionTags)) n;
+
+drop view if exists import.advisors cascade;
+create or replace view import.advisors as
+select
+    xtext(n, 'id') as id,
+    xtext(n, 'imageAssetId') as imageAssetId,
+    xtext(n, 'name') as name,
+    xtext(n, 'tooltip') as tooltip
+from import.data, unnest(xpath('advisor', advisors)) n;
+
+drop view if exists import.baseVillains cascade;
+create or replace view import.baseVillains as
+select
+    xtext(n, 'description') as description,
+    xtext(n, 'bio') as bio,
+    xtext(n, 'cogAssetId') as cogAssetId,
+    xtext(n, 'cogBio') as cogBio,
+    xtext(n, 'cogName') as cogName,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'iconAssetId') as iconAssetId,
+    xtext(n, 'id') as id,
+    xtext(n, 'name') as name,
+    xtext(n, 'swfAssetId') as swfAssetId
+from import.data, unnest(xpath('baseVillain', baseVillains)) n;
+
+
+drop view if exists import.bundles cascade;
+create or replace view import.bundles as
+select
+    xtext(n, 'costId') as costId,
+    xtext(n, 'description') as description,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'expireDate') as expireDate,
+    xtext(n, 'id') as id,
+    xtext(n, 'importantItemId') as importantItemId,
+    xtext(n, 'name') as name,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'visualLayout') as visualLayout
+from import.data, unnest(xpath('bundle', bundles)) n;
+
+drop view if exists import.chapterTrackRewards cascade;
+create or replace view import.chapterTrackRewards as
+select
+    xtext(n, 'chapterId') as chapterId,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'track') as track
+from import.data, unnest(xpath('chapterTrackReward', chapterTrackRewards)) n;
+
+drop view if exists import.chapters cascade;
+create or replace view import.chapters as
+select
+    xtext(n, 'backgroundAssetId') as backgroundAssetId,
+    xtext(n, 'challengeModeOffset') as challengeModeOffset,
+    xtext(n, 'completeRewardId') as completeRewardId,
+    xtext(n, 'description') as description,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'id') as id,
+    xtext(n, 'isEnabled') as isEnabled,
+    xtext(n, 'season') as season,
+    xtext(n, 'sequenceNumber') as sequenceNumber
+from import.data, unnest(xpath('chapter', chapters)) n;
+
+drop view if exists import.collectables cascade;
+create or replace view import.collectables as
+select
+    xtext(n, 'id') as id,
+    xtext(n, 'missingDialogId') as missingDialogId,
+    xtext(n, 'name') as name,
+    xtext(n, 'publishDate') as publishDate,
+    xtext(n, 'storyDialogId') as storyDialogId,
+    xtext(n, 'title') as title
+from import.data, unnest(xpath('collectable', collectable)) n;
+
+drop view if exists import.combatLetterGrades cascade;
+create or replace view import.combatLetterGrades as
+select
+    xtext(n, 'a') as a,
+    xtext(n, 'b') as b,
+    xtext(n, 'c') as c,
+    xtext(n, 'numberOfEnemies') as numberOfEnemies,
+    xtext(n, 's') as s,
+    xtext(n, 'sPlus') as sPlus,
+    xtext(n, 'threatLevel') as threatLevel
+from import.data, unnest(xpath('combatLetterGrade', combatLetterGrades)) n;
+
+
+drop view if exists import.fdLeases cascade;
+create or replace view import.fdLeases as
+select
+    xtext(n, 'costId') as costId,
+    xtext(n, 'id') as id
+from import.data, unnest(xpath('fdLease', fdLeases)) n;
+
+
+drop view if exists import.fdMissions cascade;
+create or replace view import.fdMissions as
+select
+    xtext(n, 'id') as id
+from import.data, unnest(xpath('fdMission', fdMissions)) n;
+
+
+drop view if exists import.fdPlanes cascade;
+create or replace view import.fdPlanes as
+select
+    xtext(n, 'friendCost') as friendCost,
+    xtext(n, 'id') as id
+from import.data, unnest(xpath('fdPlane', fdPlanes)) n;
+
+drop view if exists import.flightDeckAircrafts cascade;
+create or replace view import.flightDeckAircrafts as
+select
+    xtext(n, 'artId') as artId,
+    xtext(n, 'costId') as costId,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'iconId') as iconId,
+    xtext(n, 'id') as id,
+    xtext(n, 'landingId') as landingId,
+    xtext(n, 'landingShadowAssetId') as landingShadowAssetId,
+    xtext(n, 'level') as level,
+    xtext(n, 'lockId') as lockId,
+    xtext(n, 'numFriends') as numFriends,
+    xtext(n, 'takeoffId') as takeoffId,
+    xtext(n, 'takeoffShadowAssetId') as takeoffShadowAssetId
+from import.data, unnest(xpath('flightDeckAircraft', flightDeckAircrafts)) n;
+
+drop view if exists import.flightDeckMaps cascade;
+create or replace view import.flightDeckMaps as
+select
+    xtext(n, 'id') as id,
+    xtext(n, 'startFlightDeckSlotId') as startFlightDeckSlotId,
+    (xpath('flightDeckMapSlots', n))[0] as flightDeckMapSlots
+from import.data, unnest(xpath('flightDeckMap', flightDeckMaps)) n;
+
+drop view if exists import.flightDeckMapSlots cascade;
+create or replace view import.flightDeckMapSlots as
+select
+    id as flightDeckMapId,
+    xtext(n, 'flightDeckSlotId') as flightDeckSlotId
+from import.flightDeckMaps, unnest(xpath('flightDeckMapSlot', flightDeckMapSlots)) n;
+        
+
+drop view if exists import.flightDeckSlots cascade;
+create or replace view import.flightDeckSlots as
+select
+    xtext(n, 'finishNowCostId') as finishNowCostId,
+    xtext(n, 'id') as id,
+    xtext(n, 'level') as level,
+    xtext(n, 'lockId') as lockId,
+    xtext(n, 'nextSlotId') as nextSlotId,
+    xtext(n, 'slotTarget') as slotTarget,
+    (xpath('flightDeckSlotStates', n))[1] as flightDeckSlotStates
+from import.data, unnest(xpath('flightDeckSlot', flightDeckSlots)) n;
+
+
+drop view if exists import.flightDeckSlotStates cascade;
+create or replace view import.flightDeckSlotStates as
+select
+    id as flightDeckSlotId,
+    xtext(n, 'consumableId') as consumableId,
+    xtext(n, 'count') as count,
+    xtext(n, 'sequenceNumber') as sequenceNumber
+from import.flightDeckSlots, unnest(xpath('flightDeckSlotState', flightDeckSlotStates)) n;
+
+drop view if exists import.groupBosses cascade;
+create or replace view import.groupBosses as
+select
+    xtext(n, 'activationTime') as activationTime,
+    xtext(n, 'backgroundAssetIds') as backgroundAssetIds,
+    xtext(n, 'cogImageAssetId') as cogImageAssetId,
+    xtext(n, 'cogName') as cogName,
+    xtext(n, 'cogSwfAssetId') as cogSwfAssetId,
+    xtext(n, 'combatTableId') as combatTableId,
+    xtext(n, 'deactivationTime') as deactivationTime,
+    xtext(n, 'durationDays') as durationDays,
+    xtext(n, 'id') as id,
+    xtext(n, 'isEnabled') as isEnabled,
+    xtext(n, 'milestoneHealthPercent') as milestoneHealthPercent,
+    xtext(n, 'milestoneRewardId') as milestoneRewardId,
+    xtext(n, 'name') as name,
+    xtext(n, 'neighborVictoryRewardId') as neighborVictoryRewardId,
+    xtext(n, 'roundCount') as roundCount,
+    xtext(n, 'socialLootTableId') as socialLootTableId,
+    xtext(n, 'softCurrencyDamageMultiplier') as softCurrencyDamageMultiplier,
+    xtext(n, 'unlockQuestId') as unlockQuestId,
+    xtext(n, 'victoryRewardId') as victoryRewardId
+from import.data, unnest(xpath('groupBoss', groupBosses)) n;
+
+drop view if exists import.heroes cascade;
+create or replace view import.heroes as
+select
+    xtext(n, 'accuracyRating') as accuracyRating,
+    xtext(n, 'apRechargeRate') as apRechargeRate,
+    xtext(n, 'attackRating') as attackRating,
+    xtext(n, 'bio') as bio,
+    xtext(n, 'cogImageAssetId') as cogImageAssetId,
+    xtext(n, 'cogName') as cogName,
+    xtext(n, 'cogSwfAssetId') as cogSwfAssetId,
+    xtext(n, 'controller') as controller,
+    xtext(n, 'costId') as costId,
+    xtext(n, 'defaultCounter') as defaultCounter,
+    xtext(n, 'defenseRating') as defenseRating,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'evasionRating') as evasionRating,
+    xtext(n, 'expireDate') as expireDate,
+    xtext(n, 'healthRating') as healthRating,
+    xtext(n, 'hpRechargeRate') as hpRechargeRate,
+    xtext(n, 'iconAssetId') as iconAssetId,
+    xtext(n, 'id') as id,
+    xtext(n, 'initiative') as initiative,
+    xtext(n, 'largeAssetId') as largeAssetId,
+    xtext(n, 'leftAssetId') as leftAssetId,
+    xtext(n, 'morphSwfAssetIds') as morphSwfAssetIds,
+    xtext(n, 'obtainDialogId') as obtainDialogId,
+    xtext(n, 'purchaseLockId') as purchaseLockId,
+    xtext(n, 'rightAssetId') as rightAssetId,
+    xtext(n, 'sequenceNumber') as sequenceNumber,
+    xtext(n, 'staminaRating') as staminaRating,
+    xtext(n, 'startDate') as startDate,
+    xtext(n, 'swfAssetId') as swfAssetId,
+    xtext(n, 'tags') as tags,
+    xtext(n, 'teamTags') as teamTags,
+    xtext(n, 'unifiedExpireDateId') as unifiedExpireDateId,
+    xtext(n, 'unifiedStartDateId') as unifiedStartDateId,
+    xtext(n, 'uniformItemId') as uniformItemId,
+    xtext(n, 'worksWithTags') as worksWithTags,
+    xtext(n, 'statusIds') as statusIds,
+    (xpath('heroActions', n))[1] as heroActions
+from import.data, unnest(xpath('hero', heroes)) n;
+
+drop view if exists import.heroActions cascade;
+create or replace view import.heroActions as
+select
+    id as heroId,
+    xtext(n, 'actionId') as actionId,
+    xtext(n, 'level') as level
+from import.heroes, unnest(xpath('heroAction', heroActions)) n;
+
+drop view if exists import.localeStrings cascade;
+create or replace view import.localeStrings as
+select
+    xtext(n, 'generated') as generated,
+    xtext(n, 'locale') as locale,
+    xtext(n, 'name') as name,
+    xtext(n, 'text') as text
+from import.data, unnest(xpath('localeString', localeStrings)) n;
+
+drop view if exists import.lockboxCollections cascade;
+create or replace view import.lockboxCollections as
+select
+    xtext(n, 'associatedId') as associatedId,
+    xtext(n, 'associatedType') as associatedType,
+    xtext(n, 'backgroundAssetId') as backgroundAssetId,
+    xtext(n, 'description') as description,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'id') as id,
+    xtext(n, 'itemCollectionId') as itemCollectionId,
+    xtext(n, 'name') as name,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'silhouetteAssetId') as silhouetteAssetId,
+    xtext(n, 'smallAssetId') as smallAssetId,
+    xtext(n, 'storyTitle') as storyTitle
+from import.data, unnest(xpath('lockboxCollection', lockboxCollections)) n;
+
+drop view if exists import.missionPaths cascade;
+create or replace view import.missionPaths as
+select
+    xtext(n, 'ambientTrackAssetId') as ambientTrackAssetId,
+    xtext(n, 'bossBuildings') as bossBuildings,
+    xtext(n, 'bossId') as bossId,
+    xtext(n, 'completeDialogId') as completeDialogId,
+    xtext(n, 'grandRewardItemId') as grandRewardItemId,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'eventBuildings') as eventBuildings,
+    xtext(n, 'id') as id,
+    xtext(n, 'imageAssetId') as imageAssetId,
+    xtext(n, 'location') as location,
+    xtext(n, 'lockDescription') as lockDescription,
+    xtext(n, 'lockId') as lockId,
+    xtext(n, 'mapAssetId') as mapAssetId,
+    xtext(n, 'miniBossBuildings') as miniBossBuildings,
+    xtext(n, 'missionId') as missionId,
+    xtext(n, 'musicTrackAssetId') as musicTrackAssetId,
+    xtext(n, 'name') as name,
+    xtext(n, 'pathName') as pathName,
+    xtext(n, 'restrictedHeroTags') as restrictedHeroTags,
+    xtext(n, 'pathSortOrder') as pathSortOrder,
+    xtext(n, 'startBuildings') as startBuildings,
+    xtext(n, 'startDialogId') as startDialogId
+from import.data, unnest(xpath('missionPath', missionPaths)) n;
+
+drop view if exists import.missions cascade;
+create or replace view import.missions as
+select
+    xtext(n, 'ambientTrackAssetId') as ambientTrackAssetId,
+    xtext(n, 'baseScore') as baseScore,
+    xtext(n, 'chapterId') as chapterId,
+    xtext(n, 'colorShift') as colorShift,
+    xtext(n, 'completeDialogId') as completeDialogId,
+    xtext(n, 'description') as description,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'epicBossId') as epicBossId,
+    xtext(n, 'grandRewardItemCollectionId') as grandRewardItemCollectionId,
+    xtext(n, 'id') as id,
+    xtext(n, 'imageAssetId') as imageAssetId,
+    xtext(n, 'location') as location,
+    xtext(n, 'lockId') as lockId,
+    xtext(n, 'mapAssetId') as mapAssetId,
+    xtext(n, 'maxDeploys') as maxDeploys,
+    xtext(n, 'maxEpicBosses') as maxEpicBosses,
+    xtext(n, 'maxHeroicBattles') as maxHeroicBattles,
+    xtext(n, 'maxIncursions') as maxIncursions,
+    xtext(n, 'previewText') as previewText,
+    xtext(n, 'musicTrackAssetId') as musicTrackAssetId,
+    xtext(n, 'sequenceNumber') as sequenceNumber,
+    xtext(n, 'startDialogId') as startDialogId,
+    xtext(n, 'survivalLossPar') as survivalLossPar,
+    xtext(n, 'survivalMultiplierMax') as survivalMultiplierMax,
+    xtext(n, 'unlockDialogId') as unlockDialogId,
+    xtext(n, 'unlockQuestId') as unlockQuestId,
+    xtext(n, 'useMasteryEnemyLevels') as useMasteryEnemyLevels,
+    xtext(n, 'unifiedActivationTimeId') as unifiedActivationTimeId,
+    xtext(n, 'unifiedExpirationTimeId') as unifiedExpirationTimeId,
+    xtext(n, 'unlockTaskListCheckpointId') as unlockTaskListCheckpointId,
+    xtext(n, 'temporaryKeyIds') as temporaryKeyIds,
+    xtext(n, 'coords') as coords,
+    xtext(n, 'destinations') as destinations,
+    xtext(n, 'hideWhenLocked') as hideWhenLocked,
+    (xpath('missionMasteries', n))[1] as missionMasteries,
+    (xpath('missionParties', n))[1] as missionParties
+from import.data, unnest(xpath('missions', missions)) n;
+
+drop view if exists import.missionMasteries cascade;
+create or replace view import.missionMasteries as
+select
+    id as parentMissionId,
+    xtext(n, 'completeDialogId') as completeDialogId,
+    xtext(n, 'enemyLevelMax') as enemyLevelMax,
+    xtext(n, 'enemyLevelMin') as enemyLevelMin,
+    xtext(n, 'level') as level,
+    xtext(n, 'missionId') as missionId,
+    xtext(n, 'recommendedLevel') as recommendedLevel,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'score') as score
+from import.missions, unnest(xpath('missionMastery', missionMasteries)) n;
+
+drop view if exists import.missionParties cascade;
+create or replace view import.missionParties as
+select
+    id as parentMissionId,
+    xtext(n, 'id') as id,
+    xtext(n, 'missionId') as missionId,
+    xtext(n, 'missionPathId') as missionPathId,
+    xtext(n, 'name') as name,
+    xtext(n, 'partyId') as partyId
+from import.missions, unnest(xpath('missionParty', missionParties)) n;
+
+drop view if exists import.questPriorities cascade;
+create or replace view import.questPriorities as
+select
+    xtext(n, 'name') as name,
+    xtext(n, 'priority') as priority,
+    xtext(n, 'questType') as questType
+from import.data, unnest(xpath('questPriority', questPriorities)) n;
+
+drop view if exists import.questTasks cascade;
+create or replace view import.questTasks as
+select
+    xtext(n, 'chapterId') as chapterId,
+    xtext(n, 'index') as index,
+    xtext(n, 'name') as name,
+    xtext(n, 'rewardId') as rewardId
+from import.data, unnest(xpath('questTask', questTasks)) n;
+
+drop view if exists import.quests cascade;
+create or replace view import.quests as
+select
+    xtext(n, 'activationTime') as activationTime,
+    xtext(n, 'advisorId') as advisorId,
+    xtext(n, 'chapterId') as chapterId,
+    xtext(n, 'completeDialogId') as completeDialogId,
+    xtext(n, 'description') as description,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'expirationTime') as expirationTime,
+    xtext(n, 'hintText') as hintText,
+    xtext(n, 'iconAssetId') as iconAssetId,
+    xtext(n, 'id') as id,
+    xtext(n, 'questType') as questType,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'sideQuest') as sideQuest,
+    xtext(n, 'sortOrder') as sortOrder,
+    xtext(n, 'subIconAssetId') as subIconAssetId,
+    xtext(n, 'taskListId') as taskListId,
+    xtext(n, 'triggerDialogId') as triggerDialogId,
+    xtext(n, 'triggerDisabled') as triggerDisabled,
+    xtext(n, 'unifiedActivationTimeId') as unifiedActivationTimeId,
+    xtext(n, 'unifiedExpirationTimeId') as unifiedExpirationTimeId,
+    xtext(n, 'viewRewardId') as viewRewardId,
+    (xpath('questObjectives', n))[1] as questObjectives
+from import.data, unnest(xpath('quest', quests)) n;
+
+drop view if exists import.questObjectives cascade;
+create or replace view import.questObjectives as
+select
+    id as parentQuestId,
+    xtext(n, 'associatedId') as associatedId,
+    xtext(n, 'count') as count,
+    xtext(n, 'description') as description,
+    xtext(n, 'finishCostId') as finishCostId,
+    xtext(n, 'iconAssetId') as iconAssetId,
+    xtext(n, 'id') as id,
+    xtext(n, 'name') as name,
+    xtext(n, 'objectiveDetail') as objectiveDetail,
+    xtext(n, 'objectiveSubType') as objectiveSubType,
+    xtext(n, 'objectiveType') as objectiveType,
+    xtext(n, 'qty') as qty,
+    xtext(n, 'questId') as questId,
+    xtext(n, 'sequenceNumber') as sequenceNumber,
+    xtext(n, 'subIconAssetId') as subIconAssetId
+from import.quests, unnest(xpath('questObjective', questObjectives)) n;
+
+drop view if exists import.reconMissions cascade;
+create or replace view import.reconMissions as
+select
+    xtext(n, 'costToastId') as costToastId,
+    xtext(n, 'description') as description,
+    xtext(n, 'duration') as duration,
+    xtext(n, 'id') as id,
+    xtext(n, 'imageId') as imageId,
+    xtext(n, 'level') as level,
+    xtext(n, 'local') as local,
+    xtext(n, 'lockId') as lockId,
+    xtext(n, 'rewardId') as rewardId
+from import.data, unnest(xpath('reconMission', reconMissions)) n;
+
+drop view if exists import.researches cascade;
+create or replace view import.researches as
+select
+    xtext(n, 'category') as category,
+    xtext(n, 'costId') as costId,
+    xtext(n, 'description') as description,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'duration') as duration,
+    xtext(n, 'iconAssetId') as iconAssetId,
+    xtext(n, 'id') as id,
+    xtext(n, 'largeAssetId') as largeAssetId,
+    xtext(n, 'line') as line,
+    xtext(n, 'linePriority') as linePriority,
+    xtext(n, 'lockId') as lockId,
+    xtext(n, 'name') as name,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'smallAssetId') as smallAssetId,
+    xtext(n, 'tags') as tags,
+    xtext(n, 'unlockedItems') as unlockedItems
+from import.data, unnest(xpath('research', researches)) n;
+
+drop view if exists import.secretChapters cascade;
+create or replace view import.secretChapters as
+select
+    xtext(n, 'activationTime') as activationTime,
+    xtext(n, 'chapterId') as chapterId,
+    xtext(n, 'deactivationTime') as deactivationTime,
+    xtext(n, 'id') as id,
+    xtext(n, 'rewardId') as rewardId
+from import.data, unnest(xpath('secretChapter', secretChapters)) n;
+
+drop view if exists import.soundSettings cascade;
+create or replace view import.soundSettings as
+select
+    xtext(n, 'assetId') as assetId,
+    xtext(n, 'id') as id,
+    xtext(n, 'loop') as loop,
+    xtext(n, 'name') as name,
+    xtext(n, 'pan') as pan,
+    xtext(n, 'soundType') as soundType,
+    xtext(n, 'startDelay') as startDelay,
+    xtext(n, 'volume') as volume
+from import.data, unnest(xpath('soundSetting', soundSettings)) n;
+
+drop view if exists import.staticSettings cascade;
+create or replace view import.staticSettings as
+select
+    xtext(n, 'name') as name,
+    xtext(n, 'value') as value
+from import.data, unnest(xpath('staticSetting', staticSettings)) n;
+
+drop view if exists import.storeTags cascade;
+create or replace view import.storeTags as
+select
+    xtext(n, 'color') as color,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'iconAssetId') as iconAssetId,
+    xtext(n, 'id') as id,
+    xtext(n, 'name') as name,
+    xtext(n, 'sequenceNumber') as sequenceNumber
+from import.data, unnest(xpath('storeTag', storeTags)) n;
+
+drop view if exists import.taskListCheckpoints cascade;
+create or replace view import.taskListCheckpoints as
+select
+    xtext(n, 'id') as id,
+    xtext(n, 'name') as name,
+    xtext(n, 'requiredTaskCount') as requiredTaskCount,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'taskListId') as taskListId
+from import.data, unnest(xpath('taskListCheckpoint', taskListCheckpoints)) n;
+
+drop view if exists import.taskLists cascade;
+create or replace view import.taskLists as
+select
+    xtext(n, 'chapterId') as chapterId,
+    xtext(n, 'id') as id,
+    xtext(n, 'name') as name,
+    xtext(n, 'taskListType') as taskListType
+from import.data, unnest(xpath('taskList', taskLists)) n;
+
+drop view if exists import.tournamentLeagues cascade;
+create or replace view import.tournamentLeagues as
+select
+    xtext(n, 'cogAssetId') as cogAssetId,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'id') as id,
+    xtext(n, 'matchmakerConfigId') as matchmakerConfigId,
+    xtext(n, 'minAttacks') as minAttacks,
+    xtext(n, 'name') as name,
+    xtext(n, 'percentBuffer') as percentBuffer,
+    xtext(n, 'percentTier') as percentTier,
+    xtext(n, 'rankBuffer') as rankBuffer,
+    xtext(n, 'rankTier') as rankTier,
+    xtext(n, 'ratingTier') as ratingTier,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'sortOrder') as sortOrder,
+    xtext(n, 'tournamentName') as tournamentName,
+    (xpath('matchmakerConfig', n))[1] as matchmakerConfig
+from import.data, unnest(xpath('tournamentLeague', tournamentLeagues)) n;
+
+
+
+drop view if exists import.matchmakerConfig cascade;
+create or replace view import.matchmakerConfig as
+select
+    xtext(n, 'id') as id,
+    xtext(n, 'levelIdealAtCap') as levelIdealAtCap,
+    xtext(n, 'levelIdealUnderCap') as levelIdealUnderCap,
+    xtext(n, 'levelIncrementAtCap') as levelIncrementAtCap,
+    xtext(n, 'levelIncrementUnderCap') as levelIncrementUnderCap,
+    xtext(n, 'levelOffsetAtCap') as levelOffsetAtCap,
+    xtext(n, 'levelOffsetUnderCap') as levelOffsetUnderCap,
+    xtext(n, 'matchmakerType') as matchmakerType,
+    xtext(n, 'metascoreIdeal') as metascoreIdeal,
+    xtext(n, 'metascoreIncrement') as metascoreIncrement,
+    xtext(n, 'metascoreOffset') as metascoreOffset,
+    xtext(n, 'name') as name,
+    xtext(n, 'ratingIdeal') as ratingIdeal,
+    xtext(n, 'ratingIncrement') as ratingIncrement,
+    xtext(n, 'ratingOffset') as ratingOffset
+from import.tournamentLeagues, unnest(xpath('.', matchmakerConfig)) n;
+
+
+
+drop view if exists import.trainingBays cascade;
+create or replace view import.trainingBays as
+select
+    xtext(n, 'id') as id,
+    xtext(n, 'lockId') as lockId,
+    xtext(n, 'name') as name
+from import.data, unnest(xpath('trainingBay', trainingBays)) n;
+
+drop view if exists import.unifiedDates cascade;
+create or replace view import.unifiedDates as
+select
+    xtext(n, 'dateTs') as dateTs,
+    xtext(n, 'id') as id
+from import.data, unnest(xpath('unifiedDate', unifiedDates)) n;
+
+drop view if exists import.unlocks cascade;
+create or replace view import.unlocks as
+select
+    xtext(n, 'id') as id,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'targetId') as targetId,
+    xtext(n, 'unlockType') as unlockType
+from import.data, unnest(xpath('unlock', unlocks)) n;
+
+drop view if exists import.xpLevels cascade;
+create or replace view import.xpLevels as
+select
+    xtext(n, 'buyCostId') as buyCostId,
+    xtext(n, 'costId') as costId,
+    xtext(n, 'fdMissionSpMultiplier') as fdMissionSpMultiplier,
+    xtext(n, 'fdMissionXpMultiplier') as fdMissionXpMultiplier,
+    xtext(n, 'heroId') as heroId,
+    xtext(n, 'id') as id,
+    xtext(n, 'infusedSlotsMax') as infusedSlotsMax,
+    xtext(n, 'level') as level,
+    xtext(n, 'name') as name,
+    xtext(n, 'pvpBonus') as pvpBonus,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'trainingDuration') as trainingDuration,
+    xtext(n, 'xp') as xp
+from import.data, unnest(xpath('xpLevel', xpLevels)) n;
+
+
+drop view if exists import.actions cascade;
+create or replace view import.actions as
+select
+    xtext(n, 'iconAssetId') as iconAssetId,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'id') as id,
+    xtext(n, 'sequenceNumber') as sequenceNumber,
+    (xpath('actionLevels', n))[1] as actionLevels,
+    (xpath('actionLevelStatuses', n))[1] as actionLevelStatuses
+from import.data, unnest(xpath('action', actions)) n;
+
+drop view if exists import.actionLevels cascade;
+create or replace view import.actionLevels as
+select
+    id as actionId,
+    xtext(n, 'actionAttributes') as actionAttributes,
+    xtext(n, 'actionType') as actionType,
+    xtext(n, 'animationId') as animationId,
+    xtext(n, 'coolDownTurns') as coolDownTurns,
+    xtext(n, 'cooldownGroup') as cooldownGroup,
+    xtext(n, 'critical') as critical,
+    xtext(n, 'criticalChance') as criticalChance,
+    xtext(n, 'description') as description,
+    xtext(n, 'energy') as energy,
+    xtext(n, 'hitChance') as hitChance,
+    xtext(n, 'hits') as hits,
+    xtext(n, 'initialCooldown') as initialCooldown,
+    xtext(n, 'level') as level,
+    xtext(n, 'lockId') as lockId,
+    xtext(n, 'maxDmg') as maxDmg,
+    xtext(n, 'maxDmgFlat') as maxDmgFlat,
+    xtext(n, 'minDmg') as minDmg,
+    xtext(n, 'minDmgFlat') as minDmgFlat,
+    xtext(n, 'startCooledUp') as startCooledUp,
+    xtext(n, 'statusChance') as statusChance,
+    xtext(n, 'subActions') as subActions,
+    xtext(n, 'statusEffects') as statusEffects,
+    xtext(n, 'statusId') as statusId,
+    xtext(n, 'statusTarget') as statusTarget,
+    xtext(n, 'tags') as tags,
+    xtext(n, 'distressCallSetId') as distressCallSetId
+from import.actions, unnest(xpath('actionLevel', actionLevels)) n;
+
+drop view if exists import.actionLevelStatuses cascade;
+create or replace view import.actionLevelStatuses as
+select
+    xtext(n, 'actionId') as actionId,
+    xtext(n, 'chance') as chance,
+    xtext(n, 'level') as level,
+    xtext(n, 'recursive') as recursive,
+    xtext(n, 'property') as property,
+    xtext(n, 'requireHit') as requireHit,
+    xtext(n, 'statusId') as statusId,
+    xtext(n, 'target') as target,
+    xtext(n, 'visible') as visible
+from import.actions, unnest(xpath('actionLevelStatus', actionLevelStatuses)) n;
+
+drop view if exists import.aiScriptRules cascade;
+create or replace view import.aiScriptRules as
+select
+    xtext(n, 'enemyOrTags') as enemyOrTags,
+    xtext(n, 'id') as id,
+    xtext(n, 'targetOrTags') as targetOrTags,
+    xtext(n, 'targetNotTags') as targetNotTags,
+    xtext(n, 'selfNotTags') as selfNotTags,
+    xtext(n, 'selfOrTags') as selfOrTags,
+    xtext(n, 'targetRule') as targetRule,
+    xtext(n, 'enemyNotTags') as enemyNotTags,
+    xtext(n, 'enemiesAlive') as enemiesAlive,
+    xtext(n, 'selfHpMax') as selfHpMax,
+    xtext(n, 'selfHpMin') as selfHpMin,
+    xtext(n, 'alliesAlive') as alliesAlive,
+    xtext(n, 'roundNum') as roundNum,
+    xtext(n, 'enemyAvgHpMax') as enemyAvgHpMax,
+    xtext(n, 'enemyAvgHpMin') as enemyAvgHpMin,
+    xtext(n, 'enemyLowHpMin') as enemyLowHpMin,
+    xtext(n, 'lastTargetHpMin') as lastTargetHpMin,
+    xtext(n, 'enemyLowHpMax') as enemyLowHpMax,
+    xtext(n, 'lastTargetHpMax') as lastTargetHpMax,
+    xtext(n, 'allyLowHpMin') as allyLowHpMin,
+    xtext(n, 'allyLowHpMax') as allyLowHpMax
+from import.data, unnest(xpath('aiScriptRule', aiScriptRules)) n;
+
+drop view if exists import.aiScripts cascade;
+create or replace view import.aiScripts as
+select
+    xtext(n, 'actionId') as actionId,
+    xtext(n, 'aiScriptRuleId') as aiScriptRuleId,
+    xtext(n, 'characterId') as characterId,
+    xtext(n, 'combatType') as combatType,
+    xtext(n, 'id') as id,
+    xtext(n, 'priority') as priority,
+    xtext(n, 'weight') as weight
+from import.data, unnest(xpath('aiScript', aiScripts)) n;
+
+drop view if exists import.combatEncounters cascade;
+create or replace view import.combatEncounters as
+select
+    xtext(n, 'agentMaxLevel') as agentMaxLevel,
+    xtext(n, 'agentMinLevel') as agentMinLevel,
+    xtext(n, 'groupBossEncounterName') as groupBossEncounterName,
+    xtext(n, 'id') as id,
+    xtext(n, 'mainVillainId') as mainVillainId,
+    xtext(n, 'wave1Villain1VillainId') as wave1Villain1VillainId,
+    xtext(n, 'wave1Villain2VillainId') as wave1Villain2VillainId,
+    xtext(n, 'wave1Villain3VillainId') as wave1Villain3VillainId
+from import.data, unnest(xpath('combatEncounter', combatEncounters)) n;
+
+drop view if exists import.combatTables cascade;
+create or replace view import.combatTables as
+select
+    xtext(n, 'id') as id,
+    (xpath('combatTableEncounters', n))[1] as combatTableEncounters
+from import.data, unnest(xpath('combatTable', combatTables)) n;
+
+drop view if exists import.combatTableEncounters cascade;
+create or replace view import.combatTableEncounters as
+select
+    id as parentCombatTableId,
+    xtext(n, 'combatEncounterId') as combatEncounterId,
+    xtext(n, 'weight') as weight
+from import.combatTables, unnest(xpath('combatTableEncounter', combatTableEncounters)) n;
+
+drop view if exists import.costs cascade;
+create or replace view import.costs as
+select
+    xtext(n, 'challengePoints') as challengePoints,
+    xtext(n, 'hardCurrency') as hardCurrency,
+    xtext(n, 'id') as id,
+    xtext(n, 'itemCollectionId') as itemCollectionId,
+    xtext(n, 'softCurrency') as softCurrency
+from import.data, unnest(xpath('cost', costs)) n;
+
+
+drop view if exists import.cumulativeRewards cascade;
+create or replace view import.cumulativeRewards as
+select
+    xtext(n, 'dayNumber') as dayNumber,
+    xtext(n, 'id') as id,
+    xtext(n, 'respinCount') as respinCount,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'rewardType') as rewardType
+from import.data, unnest(xpath('cumulativeReward', cumulativeRewards)) n;
+
+
+
+drop view if exists import.dangerRoomSets cascade;
+create or replace view import.dangerRoomSets as
+select
+    xtext(n, 'displayName') as displayName,
+    xtext(n, 'expireTime') as expireTime,
+    xtext(n, 'id') as id,
+    xtext(n, 'lockId') as lockId,
+    xtext(n, 'name') as name,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'sortOrder') as sortOrder,
+    xtext(n, 'startDialogId') as startDialogId,
+    xtext(n, 'startTime') as startTime
+from import.data, unnest(xpath('dangerRoomSet', dangerRoomSets)) n;
+
+drop view if exists import.dangerRoomVillains cascade;
+create or replace view import.dangerRoomVillains as
+select
+    xtext(n, 'appearanceDate') as appearanceDate,
+    xtext(n, 'comicAppearance') as comicAppearance,
+    xtext(n, 'dangerRoomEventId') as dangerRoomEventId,
+    xtext(n, 'id') as id,
+    xtext(n, 'maaAppearance') as maaAppearance,
+    xtext(n, 'name') as name,
+    xtext(n, 'sortOrder') as sortOrder,
+    xtext(n, 'villainId') as villainId
+from import.data, unnest(xpath('dangerRoomVillain', dangerRoomVillains)) n;
+
+drop view if exists import.dialogActionLabels cascade;
+create or replace view import.dialogActionLabels as
+select
+    xtext(n, 'id') as id,
+    xtext(n, 'name') as name
+from import.data, unnest(xpath('dialogActionLabel', dialogActionLabels)) n;
+
+
+drop view if exists import.dialogGroups cascade;
+create or replace view import.dialogGroups as
+select
+    xtext(n, 'id') as id,
+    xtext(n, 'name') as name,
+    (xpath('dialogs', n))[1] as dialogs
+from import.data, unnest(xpath('dialogGroup', dialogGroups)) n;
+
+drop view if exists import.dialogs cascade;
+create or replace view import.dialogs as
+select
+    id as parentDialogGroupId,
+    xtext(n, 'blocking') as blocking,
+    xtext(n, 'characterId') as characterId,
+    xtext(n, 'displayName') as displayName,
+    xtext(n, 'flip') as flip,
+    xtext(n, 'heroId') as heroId,
+    xtext(n, 'imageAssetId') as imageAssetId,
+    xtext(n, 'layout') as layout,
+    xtext(n, 'message') as message,
+    xtext(n, 'name') as name,
+    xtext(n, 'sequenceNum') as sequenceNum,
+    xtext(n, 'title') as title,
+    (xpath('dialogActions', n))[1] as dialogActions
+from import.dialogGroups, unnest(xpath('dialog', dialogs)) n;
+
+drop view if exists import.dialogActions cascade;
+create or replace view import.dialogActions as
+select
+    xtext(n, 'action') as action,
+    xtext(n, 'buttonSequence') as buttonSequence,
+    xtext(n, 'label') as label,
+    xtext(n, 'name') as name,
+    xtext(n, 'nextActionId') as nextActionId
+from import.dialogs, unnest(xpath('dialogAction', dialogActions)) n;
+
+drop view if exists import.distressCallSets cascade;
+create or replace view import.distressCallSets as
+select
+    xtext(n, 'id') as id,
+    xtext(n, 'name') as name,
+    (xpath('distressCalls', n))[1] as distressCalls
+from import.data, unnest(xpath('distressCallSet', distressCallSets)) n;
+
+drop view if exists import.distressCalls cascade;
+create or replace view import.distressCalls as
+select
+    id as parentDistressCallSetId,
+    xtext(n, 'actionId') as actionId,
+    xtext(n, 'heroId') as heroId,
+    xtext(n, 'id') as id,
+    xtext(n, 'weight') as weight
+from import.distressCallSets, unnest(xpath('distressCall', distressCalls)) n;
+
+drop view if exists import.itemCollections cascade;
+create or replace view import.itemCollections as
+select
+    xtext(n, 'id') as id,
+    (xpath('itemCollectionMembers', n))[1] as itemCollectionMembers
+from import.data, unnest(xpath('itemCollection', itemCollections)) n;
+
+
+drop view if exists import.itemCollectionMembers cascade;
+create or replace view import.itemCollectionMembers as
+select
+    xtext(n, 'itemId') as itemId,
+    xtext(n, 'qty') as qty
+from import.itemCollections, unnest(xpath('itemCollectionMember', itemCollectionMembers)) n;
+
+drop view if exists import.locks cascade;
+create or replace view import.locks as
+select
+    xtext(n, 'id') as id,
+    xtext(n, 'itemCollectionId') as itemCollectionId,
+    (xpath('lockAttributes', n))[1] as lockAttributes
+from import.data, unnest(xpath('lock', locks)) n;
+
+drop view if exists import.lockAttributes cascade;
+create or replace view import.lockAttributes as
+select
+    xtext(n, 'name') as name,
+    xtext(n, 'value') as value
+from import.locks, unnest(xpath('lockAttribute', lockAttributes)) n;
+
+drop view if exists import.lootTables cascade;
+create or replace view import.lootTables as
+select
+    xtext(n, 'id') as id,
+    xtext(n, 'lootType') as lootType,
+    (xpath('lootTableRewards', n))[1] as lootTableRewards
+from import.data, unnest(xpath('lootTable', lootTables)) n;
+
+
+drop view if exists import.lootTableRewards cascade;
+create or replace view import.lootTableRewards as
+select
+    xtext(n, 'agentLevelMax') as agentLevelMax,
+    xtext(n, 'agentLevelMin') as agentLevelMin,
+    xtext(n, 'expireDate') as expireDate,
+    xtext(n, 'childLootTableId') as childLootTableId,
+    xtext(n, 'minSpecOpsMastery') as minSpecOpsMastery,
+    xtext(n, 'maxSpecOpsMastery') as maxSpecOpsMastery,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'startDate') as startDate,
+    xtext(n, 'weight') as weight
+from import.lootTables, unnest(xpath('lootTableReward', lootTableRewards)) n;
+
+drop view if exists import.parties cascade;
+create or replace view import.parties as
+select
+    xtext(n, 'description') as description,
+    xtext(n, 'displayName') as displayName,
+    xtext(n, 'expirationTime') as expirationTime,
+    xtext(n, 'id') as id,
+    xtext(n, 'maxPartySize') as maxPartySize,
+    xtext(n, 'name') as name,
+    xtext(n, 'toastDialogId') as toastDialogId
+from import.data, unnest(xpath('party', parties)) n;
+
+
+
+drop view if exists import.partyHeroes cascade;
+create or replace view import.partyHeroes as
+select
+    xtext(n, 'filterParties') as filterParties,
+    xtext(n, 'heroIdList') as heroIdList,
+    xtext(n, 'heroLevel') as heroLevel,
+    xtext(n, 'heroTags') as heroTags,
+    xtext(n, 'id') as id,
+    xtext(n, 'listType') as listType,
+    xtext(n, 'name') as name,
+    xtext(n, 'partyId') as partyId,
+    xtext(n, 'partyName') as partyName
+from import.data, unnest(xpath('partyHero', partyHeroes)) n;
+
+drop view if exists import.rewards cascade;
+create or replace view import.rewards as
+select
+    xtext(n, 'description') as description,
+    xtext(n, 'iconAssetId') as iconAssetId,
+    xtext(n, 'id') as id,
+    xtext(n, 'xp') as xp,
+    xtext(n, 'itemCollectionId') as itemCollectionId,
+    xtext(n, 'softCurrency') as softCurrency,
+    xtext(n, 'hardCurrency') as hardCurrency,
+    xtext(n, 'energy') as energy,
+    xtext(n, 'challengePoints') as challengePoints,
+    (xpath('unlocks', n))[1] as unlocks
+from import.data, unnest(xpath('reward', rewards)) n;
+
+drop view if exists import.rewardUnlocks cascade;
+create or replace view import.rewardUnlocks as
+select
+    xtext(n, 'id') as id,
+    xtext(n, 'rewardId') as rewardId,
+    xtext(n, 'targetId') as targetId,
+    xtext(n, 'unlockType') as unlockType
+from import.rewards, unnest(xpath('unlock', unlocks)) n;
+
+
+drop view if exists import.statuses cascade;
+create or replace view import.statuses as
+select
+    xtext(n, 'actionNotTags') as actionNotTags,
+    xtext(n, 'actionOrTags') as actionOrTags,
+    xtext(n, 'archetype') as archetype,
+    xtext(n, 'animId') as animId,
+    xtext(n, 'characterNotTags') as characterNotTags,
+    xtext(n, 'characterOrTags') as characterOrTags,
+    xtext(n, 'className') as className,
+    xtext(n, 'count') as count,
+    xtext(n, 'description') as description,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'duration') as duration,
+    xtext(n, 'durationOn') as durationOn,
+    xtext(n, 'iconAssetId') as iconAssetId,
+    xtext(n, 'iconBg') as iconBg,
+    xtext(n, 'id') as id,
+    xtext(n, 'isBoon') as isBoon,
+    xtext(n, 'minLevel') as minLevel,
+    xtext(n, 'spawnStatusId') as spawnStatusId,
+    xtext(n, 'permanent') as permanent,
+    xtext(n, 'stackMax') as stackMax,
+    xtext(n, 'statusOrTags') as statusOrTags,
+    xtext(n, 'tags') as tags,
+    xtext(n, 'triggerChance') as triggerChance,
+    xtext(n, 'triggersOn') as triggersOn,
+    xtext(n, 'weight') as weight,
+    xtext(n, 'target') as target,
+    xtext(n, 'add') as add,
+    xtext(n, 'visible') as visible,
+    xtext(n, 'remove') as remove,
+    xtext(n, 'targetNotTags') as targetNotTags,
+    xtext(n, 'targetOrTags') as targetOrTags,
+    xtext(n, 'requireHit') as requireHit,
+    xtext(n, 'useAction') as useAction,
+    xtext(n, 'priority') as priority,
+    xtext(n, 'stackGroup') as stackGroup,
+    xtext(n, 'scalarType') as scalarType,
+    xtext(n, 'actorNotTags') as actorNotTags,
+    xtext(n, 'actorOrTags') as actorOrTags,
+    xtext(n, 'extra') as extra,
+    xtext(n, 'rating') as rating,
+    xtext(n, 'oneUp') as oneUp,
+    xtext(n, 'allowChains') as allowChains,
+    xtext(n, 'useTarget') as useTarget,
+    xtext(n, 'statusNotTags') as statusNotTags,
+    xtext(n, 'maxCountersPerRound') as maxCountersPerRound,
+    xtext(n, 'dialogGroup') as dialogGroup,
+    xtext(n, 'characterHpMin') as characterHpMin,
+    xtext(n, 'min') as min,
+    xtext(n, 'characterHpMax') as characterHpMax,
+    xtext(n, 'actorHpMax') as actorHpMax,
+    xtext(n, 'inTray') as inTray,
+    xtext(n, 'enemy') as enemy,
+    xtext(n, 'area') as area,
+    xtext(n, 'all') as all,
+    xtext(n, 'ally') as ally,
+    xtext(n, 'defense') as defense,
+    xtext(n, 'myTeam') as myTeam,
+    xtext(n, 'targetHpMax') as targetHpMax,
+    xtext(n, 'flat') as flat,
+    xtext(n, 'targetHpMin') as targetHpMin,
+    xtext(n, 'actorHpMin') as actorHpMin,
+    xtext(n, 'characterApMax') as characterApMax,
+    xtext(n, 'sortOrder') as sortOrder,
+    xtext(n, 'characterApMin') as characterApMin,
+    xtext(n, 'requireHitOnMe') as requireHitOnMe,
+    xtext(n, 'actionAnimId') as actionAnimId,
+    xtext(n, 'scalar') as scalar,
+    (xpath('children', n))[1] as children
+from import.data, unnest(xpath('status', statuses)) n;
+
+drop view if exists import.statusChildren cascade;
+create or replace view import.statusChildren as
+select
+    id as statusId,
+    xtext(n, '.') as childStatusId
+from import.statuses, unnest(xpath('child', children)) n;
+
+drop view if exists import.statusArchetypes cascade;
+create or replace view import.statusArchetypes as
+select
+    xtext(n, 'iconBg') as iconBg,
+    xtext(n, 'id') as id,
+    xtext(n, 'inTray') as inTray,
+    xtext(n, 'isBoon') as isBoon,
+    xtext(n, 'name') as name,
+    xtext(n, 'oneUp') as oneUp,
+    xtext(n, 'sortOrder') as sortOrder,
+    xtext(n, 'visible') as visible
+from import.data, unnest(xpath('statusArchetype', statusArchetypes)) n;
+
+drop view if exists import.villains cascade;
+create or replace view import.villains as
+select
+    xtext(n, 'accuracyRating') as accuracyRating,
+    xtext(n, 'attackRating') as attackRating,
+    xtext(n, 'baseVillainId') as baseVillainId,
+    xtext(n, 'bio') as bio,
+    xtext(n, 'cogAssetId') as cogAssetId,
+    xtext(n, 'cogBio') as cogBio,
+    xtext(n, 'cogName') as cogName,
+    xtext(n, 'controller') as controller,
+    xtext(n, 'defaultCounter') as defaultCounter,
+    xtext(n, 'defenseRating') as defenseRating,
+    xtext(n, 'description') as description,
+    xtext(n, 'dispName') as dispName,
+    xtext(n, 'evasionRating') as evasionRating,
+    xtext(n, 'friendBarIconAssetId') as friendBarIconAssetId,
+    xtext(n, 'healthRating') as healthRating,
+    xtext(n, 'iconAssetId') as iconAssetId,
+    xtext(n, 'id') as id,
+    xtext(n, 'initiative') as initiative,
+    xtext(n, 'morphSwfAssetIds') as morphSwfAssetIds,
+    xtext(n, 'largeAssetId') as largeAssetId,
+    xtext(n, 'name') as name,
+    xtext(n, 'rightAssetId') as rightAssetId,
+    xtext(n, 'rpsType') as rpsType,
+    xtext(n, 'staminaRating') as staminaRating,
+    xtext(n, 'swfAssetId') as swfAssetId,
+    xtext(n, 'tags') as tags,
+    xtext(n, 'xp') as xp,
+    xtext(n, 'statusIds') as statusIds,
+    (xpath('villainActions', n))[1] as villainActions
+from import.data, unnest(xpath('villains', villains)) n;
+
+drop view if exists import.villainActions cascade;
+create or replace view import.villainActions as
+select
+    xtext(n, 'actionId') as actionId,
+    xtext(n, 'level') as level
+from import.villains, unnest(xpath('villainAction', villainActions)) n;
+
+end transaction;
+set client_min_messages = notice;

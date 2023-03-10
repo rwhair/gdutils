@@ -1,0 +1,17 @@
+select 
+display_name as "Name",
+health_rating as "Health Rating",
+stamina_rating as "Stamina Rating",
+attack_rating as "Attack Rating",
+defense_rating as "Defense Rating",
+accuracy_rating as "Accuracy Rating",
+evasion_rating as "Evasion Rating",
+health_recharge_rate as "Health Recovery",
+stamina_recharge_rate as "Stamina Recovery",
+initiative as "Initiative",
+regexp_replace(bio, '[\n]+', ' ', 'g') as "Bio",
+hero_id as "Hero ID"
+from hero
+order by sequence_number;
+
+

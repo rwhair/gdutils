@@ -1,0 +1,528 @@
+set client_min_messages = error;
+begin transaction;
+
+/*
+==============================
+status_archetype
+==============================
+*/
+
+drop table if exists status_archetype cascade;
+create table status_archetype as
+select
+    iconBg as icon_bg_url,
+    id :: uuid as status_archetype_id,
+    inTray :: boolean as in_tray,
+    isBoon :: boolean as is_boon,
+    name as name,
+    oneUp :: boolean as one_up,
+    sortOrder :: integer as sort_order,
+    visible :: boolean as visible
+from import.statusArchetypes;
+
+alter table status_archetype add primary key(status_archetype_id);
+
+/*
+==============================
+status
+==============================
+*/
+
+drop table if exists status;
+create table status as
+select
+    archetype :: uuid as status_archetype_id,
+    animId as anim_id,
+    className as class_name,
+    case when count ~ '[a-zA-Z]+' then -1 else count :: integer end as count,
+    description as description,
+    dispName as display_name,
+    case when duration ~ '[a-zA-Z]+' then -1 else duration :: integer end as duration,
+    durationOn as duration_on,
+    iconAssetId as icon_asset_url,
+    iconBg as icon_bg_url,
+    id :: uuid as status_id,
+    isBoon :: boolean as is_boon,
+    minLevel :: integer as min_level,
+    permanent :: boolean as permanent,
+    case when stackMax ~ '[a-zA-Z]+' then -1 else stackMax :: integer end as stack_max,
+    triggerChance :: decimal as trigger_chance,
+    triggersOn as triggers_on,
+    weight :: decimal as weight,
+    target as target,
+    visible :: boolean as visible,
+    requireHit as require_hit,
+    useAction as use_action,
+    priority :: integer as priority,
+    stackGroup as stack_group,
+    scalarType as scalar_type,
+    extra :: integer as extra,
+    rating :: integer as rating,
+    oneUp :: boolean as one_up,
+    allowChains :: boolean as allow_chains,
+    useTarget as use_target,
+    maxCountersPerRound :: integer as max_counters_per_round,
+    dialogGroup :: uuid as dialog_group_id,
+    characterHpMin :: decimal as character_health_min,
+    min :: integer as min,
+    characterHpMax :: decimal as character_health_max,
+    actorHpMax :: decimal as actor_health_max,
+    inTray :: boolean as in_tray,
+    enemy as enemy_id,
+    area as area_id,
+    "all" as all_id,
+    ally as ally_id,
+    defense as defense_id,
+    myTeam as my_team_id,
+    targetHpMax :: decimal as target_health_max,
+    flat :: decimal as flat,
+    targetHpMin :: decimal as target_health_min,
+    actorHpMin :: decimal as actor_health_min,
+    characterApMax :: decimal as character_stamina_max,
+    sortOrder :: integer as sort_order,
+    characterApMin :: decimal as character_stamina_min,
+    requireHitOnMe :: boolean as require_hit_on_me,
+    actionAnimId as action_anim_id,
+    scalar :: decimal as scalar
+from import.statuses;
+
+alter table status add primary key(status_id);
+
+/*
+==============================
+status_action_not_tag
+==============================
+*/
+
+drop table if exists status_action_not_tag cascade;
+create table status_action_not_tag as
+select s.id :: uuid as status_id, t.tag as tag
+from import.statuses s, regexp_split_to_table(s.actionNotTags, '\,') as t(tag);
+
+/*
+==============================
+status_action_or_tag
+==============================
+*/
+
+drop table if exists status_action_or_tag cascade;
+create table status_action_or_tag as
+select s.id :: uuid as status_id, t.tag as tag
+from import.statuses s, regexp_split_to_table(s.actionOrTags, '\,') as t(tag);
+
+/*
+==============================
+status_character_not_tag
+==============================
+*/
+
+drop table if exists status_character_not_tag cascade;
+create table status_character_not_tag as
+select s.id :: uuid as status_id, t.tag as tag
+from import.statuses s, regexp_split_to_table(s.characterNotTags, '\,') as t(tag);
+
+/*
+==============================
+status_character_or_tag
+==============================
+*/
+
+drop table if exists status_character_or_tag cascade;
+create table status_character_or_tag as
+select s.id :: uuid as status_id, t.tag as tag
+from import.statuses s, regexp_split_to_table(s.characterOrTags, '\,') as t(tag);
+
+/*
+==============================
+status_target_not_tag
+==============================
+*/
+
+drop table if exists status_target_not_tag cascade;
+create table status_target_not_tag as
+select s.id :: uuid as status_id, t.tag as tag
+from import.statuses s, regexp_split_to_table(s.targetNotTags, '\,') as t(tag);
+
+/*
+==============================
+status_target_or_tag
+==============================
+*/
+
+drop table if exists status_target_or_tag cascade;
+create table status_target_or_tag as
+select s.id :: uuid as status_id, t.tag as tag
+from import.statuses s, regexp_split_to_table(s.targetOrTags, '\,') as t(tag);
+
+/*
+==============================
+status_actor_not_tag
+==============================
+*/
+
+drop table if exists status_actor_not_tag cascade;
+create table status_actor_not_tag as
+select s.id :: uuid as status_id, t.tag as tag
+from import.statuses s, regexp_split_to_table(s.actorNotTags, '\,') as t(tag);
+
+/*
+==============================
+status_actor_or_tag
+==============================
+*/
+
+drop table if exists status_actor_or_tag cascade;
+create table status_actor_or_tag as
+select s.id :: uuid as status_id, t.tag as tag
+from import.statuses s, regexp_split_to_table(s.actorOrTags, '\,') as t(tag);
+
+/*
+==============================
+status_status_not_tag
+==============================
+*/
+
+drop table if exists status_status_not_tag cascade;
+create table status_status_not_tag as
+select s.id :: uuid as status_id, t.tag as tag
+from import.statuses s, regexp_split_to_table(s.statusNotTags, '\,') as t(tag);
+
+/*
+==============================
+status_tag
+==============================
+*/
+
+drop table if exists status_tag cascade;
+create table status_tag as
+select s.id :: uuid as status_id, t.tag as tag
+from import.statuses s, regexp_split_to_table(s.tags, '\,') as t(tag);
+
+/*
+==============================
+status_add
+==============================
+*/
+
+drop table if exists status_add cascade;
+create table status_add as
+select s.id :: uuid as status_id, t.tag as tag
+from import.statuses s, regexp_split_to_table(s.add, '\|') as t(tag);
+
+/*
+==============================
+status_remove
+==============================
+*/
+
+drop table if exists status_remove cascade;
+create table status_remove as
+select s.id :: uuid as status_id, t.tag as tag
+from import.statuses s, regexp_split_to_table(s.remove, '\|') as t(tag);
+
+/*
+==============================
+status_spawn_status
+==============================
+*/
+
+drop table if exists status_spawn_status cascade;
+create table status_spawn_status as
+select s.id :: uuid as status_id, ss.status_id as spawn_status_id
+from import.statuses s, regexp_split_to_table(s.spawnStatusId, '\,') as ss(status_id);
+
+/*
+==============================
+status_child
+==============================
+*/
+
+drop table if exists status_child cascade;
+create table status_child as 
+select 
+    statusId :: uuid as status_id, 
+    childStatusId :: uuid as child_status_id
+from import.statusChildren;
+
+/*
+==============================
+status_tree
+==============================
+*/
+
+drop table if exists status_tree cascade;
+create table status_tree as
+with recursive st as (
+    (
+        select s.status_id as root_status_id, s.status_id as status_id 
+        from status s 
+    )
+    union
+    (
+        select sc.status_id as root_status_id, sc.child_status_id as status_id
+        from status_child sc
+        join st on (st.root_status_id = sc.child_status_id)
+    )
+)
+select * from st;
+
+
+/*
+==============================
+action
+==============================
+*/
+
+drop table if exists action cascade;
+create table action as
+select
+    iconAssetId as icon_asset_url,
+    dispName as display_name,
+    id :: uuid as action_id,
+    sequenceNumber :: integer as sequence_number
+from import.actions;
+
+/*
+==============================
+action_level
+==============================
+*/
+
+drop table if exists action_level cascade;
+create table action_level as
+select
+    actionId :: uuid as action_id,
+    --actionAttributes,
+    actionType as action_type,
+    animationId as animation_id,
+    coolDownTurns :: integer as cooldown_turns,
+    cooldownGroup as cooldown_group,
+    critical :: decimal as critical,
+    criticalChance :: decimal as critical_chance,
+    description as description,
+    energy :: decimal as energy,
+    hitChance :: decimal as hit_chance,
+    hits :: integer as hits,
+    initialCooldown :: integer as initial_cooldown,
+    level :: integer as level,
+    lockId as lock_id,
+    maxDmg :: decimal as max_dmg,
+    maxDmgFlat :: decimal as max_dmg_flat,
+    minDmg :: decimal as min_dmg,
+    minDmgFlat :: decimal as min_dmg_flat,
+    startCooledUp :: boolean as start_cooled_up,
+    statusChance :: decimal as status_chance,
+    --statusEffects,
+    statusId :: uuid as status_id,
+    statusTarget as status_target,
+    distressCallSetId :: uuid as distress_call_set_id
+from import.actionLevels;
+
+/*
+==============================
+action_level_status
+==============================
+*/
+
+drop table if exists action_level_status cascade;
+create table action_level_status as
+select
+    actionId :: uuid as action_id,
+    chance :: decimal as chance,
+    level :: integer as level,
+    recursive :: boolean as recursive,
+    property :: boolean as property,
+    requireHit :: boolean as requireHit,
+    statusId :: uuid as status_id,
+    target as target,
+    visible :: boolean as visible
+from import.actionLevelStatuses;
+
+/*
+==============================
+action_level_sub_action
+==============================
+*/
+
+drop table if exists action_level_sub_action cascade;
+create table action_level_sub_action as
+select
+    a.actionId :: uuid as action_id,
+    a.level :: integer as level,
+    s.subActionId :: uuid as sub_action_id
+from import.actionLevels a, regexp_split_to_table(a.subActions, '\,') as s(subActionId);
+
+/*
+==============================
+action_level_tag
+==============================
+*/
+
+drop table if exists action_level_tag cascade;
+create table action_level_tag as
+select
+    a.actionId :: uuid as action_id,
+    a.level :: integer as level,
+    t.tag as tag
+from import.actionLevels a, regexp_split_to_table(a.tags, '\,') as t(tag);
+
+/*
+==============================
+action_level_attribute
+==============================
+*/
+
+drop table if exists action_level_attribute cascade;
+create table action_level_attribute as
+select 
+    a.actionId :: uuid as action_id,
+    a.level :: integer as level,
+    split_part(t.attribute, '=', 1) :: character varying as name,
+    split_part(t.attribute, '=', 2) :: character varying as value
+from import.actionLevels a, regexp_split_to_table(a.actionAttributes, '\,') as t(attribute);
+
+/*
+==============================
+action_level_status_effect
+==============================
+*/
+
+drop table if exists action_level_status_effect cascade;
+create table action_level_status_effect as
+select
+    actionId :: uuid as action_id,
+    level :: integer as level,
+    n :: integer as effect_id,
+    split_part(statusEffect, '|', 1) :: character varying as effect
+from import.actionLevels, regexp_split_to_table(statusEffects, '\,') with ordinality s(statusEffect, n);
+
+
+/*
+========================================
+action_level_status_effect_attribute
+========================================
+*/
+
+drop table if exists action_level_status_effect_attribute cascade;
+create table action_level_status_effect_attribute as
+select
+    actionId :: uuid as action_id,
+    level :: integer as level,
+    n :: integer as effect_id,
+    split_part(t.attribute, '=', 1) :: character varying as name,
+    split_part(t.attribute, '=', 2) :: character varying as value    
+from import.actionLevels, regexp_split_to_table(statusEffects, '\,') with ordinality s(statusEffect, n), regexp_split_to_table(statusEffect, '\|') with ordinality t(attribute, i)
+where i > 1;
+
+
+/*
+==============================
+hero
+==============================
+*/
+
+drop table if exists hero cascade;
+create table hero as
+select
+    accuracyRating :: integer as accuracy_rating,
+    apRechargeRate :: decimal as stamina_recharge_rate,
+    attackRating :: integer as attack_rating,
+    bio as bio,
+    cogImageAssetId as cog_image_asset_url,
+    cogName as cog_name,
+    cogSwfAssetId as cog_swf_asset_url,
+    controller as controller,
+    costId as cost_id,
+    defaultCounter :: uuid as default_counter_id,
+    defenseRating :: integer as defense_rating,
+    dispName as display_name,
+    evasionRating :: integer as evasion_rating,
+    (timestamp with time zone 'epoch') + ((expireDate :: integer) * interval '1 second') as expire_date,
+    healthRating :: integer as health_rating,
+    hpRechargeRate :: decimal as health_recharge_rate,
+    id :: uuid as hero_id,
+    initiative :: integer as initiative,
+    largeAssetId as large_asset_url,
+    leftAssetId as left_asset_url,
+    morphSwfAssetIds as morph_swf_asset_url,
+    obtainDialogId :: uuid as obtain_dialog_id,
+    purchaseLockId as purchase_lock_id,
+    rightAssetId as right_asset_url,
+    sequenceNumber :: integer as sequence_number,
+    staminaRating :: integer as stamina_rating,
+    swfAssetId as swf_asset_url,
+    unifiedExpireDateId :: uuid as unified_expire_date_id,
+    unifiedStartDateId :: uuid as unified_start_date_id,
+    uniformItemId :: uuid as uniform_item_id
+from import.heroes;
+
+alter table hero add primary key(hero_id);
+
+/*
+==============================
+hero_tag
+==============================
+*/
+
+drop table if exists hero_tag cascade;
+create table hero_tag as
+select
+    h.id :: uuid as hero_id,
+    t.tag as tag
+from import.heroes h, regexp_split_to_table(h.tags, '\,') as t(tag);
+
+/*
+==============================
+hero_team_tag
+==============================
+*/
+
+drop table if exists hero_team_tag cascade;
+create table hero_team_tag as
+select 
+    h.id :: uuid as hero_id,
+    t.tag as tag
+from import.heroes h, regexp_split_to_table(h.teamTags, '\,') as t(tag);
+
+/*
+==============================
+hero_works_with_tag
+==============================
+*/
+
+drop table if exists hero_works_with_tag cascade;
+create table hero_works_with_tag as
+select
+    h.id :: uuid as hero_id,
+    t.tag as tag
+from import.heroes h, regexp_split_to_table(h.worksWithTags, '\,') as t(tag);
+    
+/*
+==============================
+hero_status
+==============================
+*/
+
+drop table if exists hero_status cascade;
+create table hero_status as
+select
+    h.id :: uuid as hero_id,
+    s.status_id :: uuid as status_id
+from import.heroes h, regexp_split_to_table(h.statusIds, '\,') as s(status_id);
+
+/*
+==============================
+hero_action
+==============================
+*/
+
+drop table if exists hero_action cascade;
+create table hero_action as
+select
+    heroId :: uuid as hero_id,
+    actionId :: uuid as action_id,
+    level :: integer as level
+from import.heroActions;
+
+commit transaction;
+set client_min_messages = notice;
